@@ -72,9 +72,10 @@ describe("applyBionicReading", () => {
 describe("parseFile (EPUB)", () => {
 	it("extracts text and title from a valid EPUB", async () => {
 		const buffer = readFileSync(
-			join(import.meta.dirname, "../../test-fixtures/sample.epub"),
+			join(process.cwd(), "test-fixtures/sample.epub"),
 		);
-		const file = new File([buffer], "sample.epub", {
+		// Copy Buffer into a plain Uint8Array so it satisfies BlobPart under strict DOM typings.
+		const file = new File([new Uint8Array(buffer)], "sample.epub", {
 			type: "application/epub+zip",
 		});
 

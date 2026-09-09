@@ -35,3 +35,6 @@ test-results/
 
 # Kilo AI tooling
 .kilo/
+
+# TypeScript incremental build cache
+*.tsbuildinfo
