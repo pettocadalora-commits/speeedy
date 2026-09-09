@@ -94,10 +94,14 @@ opt-in e aditiva.
 
 ### Arquitetura
 
-- **Pacote compartilhado** para o engine: hoje `rsvp-engine.ts` + `text-utils.ts`
+- **Pacote compartilhado para o engine**: `rsvp-engine.ts` + `text-utils.ts`
   + `models/types.ts` + `defaults.ts` são puros (sem DOM no engine — já testado).
-  Extrair para `packages/speeedy-core` (ou pasta `shared/` importada pelos dois
-  builds: app Vite + extension). **Não duplicar engine.**
+  **Decisão: extension importa direto do `src/`** (ex. `../../src/services/rsvp-engine.js`),
+  sem refactor de extração — tree-shaking do Vite puxa só o necessário.
+  **Regra de pureza obrigatória:** módulos compartilhados NÃO podem importar
+  CSS/DOM/IndexedDB (hoje: `types` 100% puro; engine só `navigator.language` c/
+  fallback; `defaults` guardado p/ non-window; `DOMParser` só em `htmlToPlainText`,
+  parser-only, fora do core). Violação quebra a extension silenciosamente.
 - Extension: `src-extension/` (Vite + `@crxjs/vite-plugin` ou build manual),
   content script NÃO injeta UI na página (somente extrai seleção via
   `chrome.scripting` no click da action); popup é HTML próprio isolado.
