@@ -2,9 +2,12 @@ import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Heart } from "lucide";
 import type { BenchmarkPassage } from "../data/benchmark-passages.js";
-import { pickPassage } from "../data/benchmark-passages.js";
+import { getBenchmarkPassages } from "../data/benchmark-passages.js";
 import { LocaleController } from "../i18n/controller.js";
+import type { Locale } from "../i18n/index.js";
+import { onLocaleChange } from "../i18n/index.js";
 import type { UserProfile } from "../models/types.js";
+import { tokenize } from "../services/rsvp-engine.js";
 import { saveProfile } from "../services/storage-service.js";
 import {
 	comprehensionBracket,
@@ -17,6 +20,38 @@ import "./ui/page-nav.js";
 
 type Phase = "intro" | "reading" | "quiz" | "results";
 
+/**
+ * Sorteia uma passagem do locale pedido.
+ *
+ * Existe como função pura (e exportada) porque é justamente aqui que estava o
+ * defeito: `pickPassage()` do arquivo de dados só enxerga o array inglês, então
+ * as 5 passagens pt-BR nunca apareciam na interface. Cair para o inglês quando o
+ * locale não tem passagens evita tela vazia.
+ */
+export function pickPassageForLocale(
+	locale: Locale,
+	excludeId?: string,
+): BenchmarkPassage {
+	const all = getBenchmarkPassages(locale);
+	const available = excludeId
+		? all.filter((p) => p.id !== excludeId)
+		: all;
+	const pool = available.length > 0 ? available : all;
+	return pool[Math.floor(Math.random() * pool.length)];
+}
+
+/**
+ * WPM = tokens realmente lidos / minutos.
+ *
+ * O denominador vem do tokenizador, não do campo `wordCount` do arquivo de
+ * dados: nas passagens inglesas herdadas do upstream esse campo desvia de +0,7%
+ * a +5,8% (sleep-science declara 308, o tokenizador produz 291), inflando o WPM.
+ */
+export function computeWpm(text: string, elapsedMs: number): number {
+	const elapsedMinutes = elapsedMs / 60_000;
+	return Math.round(tokenize(text).length / Math.max(elapsedMinutes, 0.1));
+}
+
 @customElement("benchmark-test")
 export class BenchmarkTest extends LitElement {
 	private i18n = new LocaleController(this);
@@ -25,10 +60,46 @@ export class BenchmarkTest extends LitElement {
 		return this;
 	}
 
+	override connectedCallback() {
+		super.connectedCallback();
+		this.unsubscribeLocale = onLocaleChange(this.handleLocaleChange);
+	}
+
+	override disconnectedCallback() {
+		this.unsubscribeLocale?.();
+		this.unsubscribeLocale = undefined;
+		super.disconnectedCallback();
+	}
+
+	private readonly handleLocaleChange = () => {
+		// Só re-sorteia antes de começar: trocar de passagem no meio do teste
+		// descartaria a leitura em andamento.
+		if (this.phase === "intro") this.passage = this.pickLocalizedPassage();
+	};
+
+	private pickLocalizedPassage(excludeId?: string): BenchmarkPassage {
+		return pickPassageForLocale(this.i18n.locale, excludeId);
+	}
+
+	/**
+	 * Denominador do WPM: o número de tokens que o leitor realmente percorre.
+	 *
+	 * Não usar `passage.wordCount`. Nas 5 passagens inglesas herdadas do upstream
+	 * esse campo desvia de +0,7% a +5,8% do que o tokenizador produz (ex.:
+	 * sleep-science declara 308 e o tokenizador devolve 291), o que INFLA o WPM em
+	 * inglês. Medir a partir do texto é sempre exato e, ao corrigir o consumo em
+	 * vez do dado, mantém o bloco de passagens byte a byte igual ao upstream — o
+	 * que evita conflito a cada merge.
+	 */
+	private get wordCount(): number {
+		return tokenize(this.passage.text).length;
+	}
+
 	@property({ type: Object }) profile!: UserProfile;
 
 	@state() private phase: Phase = "intro";
-	@state() private passage: BenchmarkPassage = pickPassage();
+	@state() private passage: BenchmarkPassage = this.pickLocalizedPassage();
+	private unsubscribeLocale?: () => void;
 	@state() private readingStartTime = 0;
 	@state() private answers: (number | null)[] = [];
 	@state() private resultWpm = 0;
@@ -45,10 +116,9 @@ export class BenchmarkTest extends LitElement {
 	}
 
 	private finishReading() {
-		const elapsedMs = Date.now() - this.readingStartTime;
-		const elapsedMinutes = elapsedMs / 60_000;
-		this.resultWpm = Math.round(
-			this.passage.wordCount / Math.max(elapsedMinutes, 0.1),
+		this.resultWpm = computeWpm(
+			this.passage.text,
+			Date.now() - this.readingStartTime,
 		);
 		this.phase = "quiz";
 	}
@@ -73,7 +143,7 @@ export class BenchmarkTest extends LitElement {
 	}
 
 	private reset() {
-		this.passage = pickPassage(this.passage.id);
+		this.passage = this.pickLocalizedPassage(this.passage.id);
 		this.phase = "intro";
 		this.readingStartTime = 0;
 		this.answers = [];
@@ -122,7 +192,7 @@ export class BenchmarkTest extends LitElement {
             </div>
 
             <div class="grid grid-cols-3 gap-3">
-              ${this.chip(this.i18n.t("bench.wordCount", { count: this.passage.wordCount }), this.i18n.t("bench.passageLength"))}
+              ${this.chip(this.i18n.t("bench.wordCount", { count: this.wordCount }), this.i18n.t("bench.passageLength"))}
               ${this.chip(this.i18n.t("bench.yourPace"), this.i18n.t("bench.noTimePressure"))}
               ${this.chip(this.i18n.t("bench.questionCount", { count: 10 }), this.i18n.t("bench.comprehensionQuiz"))}
             </div>
@@ -155,7 +225,7 @@ export class BenchmarkTest extends LitElement {
           <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/8 text-primary text-xs font-medium tracking-wide">
             ${this.i18n.t("bench.readingTest")}
           </span>
-          <span class="text-xs text-ui-muted">${this.i18n.t("bench.passageMetadata", { count: this.passage.wordCount, title: this.passage.title })}</span>
+          <span class="text-xs text-ui-muted">${this.i18n.t("bench.passageMetadata", { count: this.wordCount, title: this.passage.title })}</span>
         </div>
 
         <main class="flex-1 max-w-2xl mx-auto w-full px-6 py-6">
