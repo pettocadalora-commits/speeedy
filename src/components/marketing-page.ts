@@ -7,6 +7,8 @@ const githubIcon = (cls: string) =>
 
 import { animate, hover, inView } from "motion";
 import { GITHUB_URL } from "../config.js";
+import { LocaleController } from "../i18n/controller.js";
+import type { MessageKey } from "../i18n/index.js";
 import type { ThemeName, UserProfile } from "../models/types.js";
 import { saveProfile } from "../services/storage-service.js";
 import { applyTheme, getResolvedTheme } from "../services/theme-service.js";
@@ -17,42 +19,19 @@ import "./hero-rsvp-demo.js";
 import "./orp-demo.js";
 
 const FEATURES = [
-	[
-		"ORP alignment",
-		"Every word snaps to its Optimal Recognition Point — the exact letter where your brain reads fastest.",
-	],
-	[
-		"Smart pauses",
-		"Long words get extra milliseconds. Sentence-end pauses let working memory consolidate.",
-	],
-	[
-		"Peripheral context",
-		"1–3 context words dimmed above and below. Stay oriented without losing focus.",
-	],
-	[
-		"Dyslexia & Irlen modes",
-		"OpenDyslexic font, extra spacing, tinted overlays (peach, mint, parchment).",
-	],
-	[
-		"Arabic & CJK",
-		"Intl.Segmenter tokenizes non-Latin scripts. Arabic renders RTL with full ligatures.",
-	],
-	[
-		"Local-first",
-		"Your reading data stays in your browser. No account. Export .speeedy backup anytime.",
-	],
-	[
-		"Full keyboard",
-		"Space = play/pause. Arrows = speed. R = restart. No mouse needed.",
-	],
-	[
-		"Bionic mode",
-		"Bold first letters anchor your eye. Use with RSVP and ORP together.",
-	],
-];
+	["featureOrpTitle", "featureOrpDescription"],
+	["featurePausesTitle", "featurePausesDescription"],
+	["featureContextTitle", "featureContextDescription"],
+	["featureDyslexiaTitle", "featureDyslexiaDescription"],
+	["featureScriptsTitle", "featureScriptsDescription"],
+	["featureLocalTitle", "featureLocalDescription"],
+	["featureKeyboardTitle", "featureKeyboardDescription"],
+	["featureBionicTitle", "featureBionicDescription"],
+] as const;
 
 @customElement("marketing-page")
 export class MarketingPage extends LitElement {
+	private i18n = new LocaleController(this);
 	protected override createRenderRoot() {
 		return this;
 	}
@@ -183,64 +162,58 @@ export class MarketingPage extends LitElement {
 	}
 
 	private renderPersonas() {
-		const PERSONAS: [string, string, string][] = [
-			[
-				"01",
-				"Students & Researchers",
-				"Work through papers, textbooks, and reading lists faster. PDF and EPUB import, no account required, no data leaving your device.",
-			],
-			[
-				"02",
-				"ADHD & Neurodivergent",
-				"Irlen overlays, OpenDyslexic font, Pomodoro with auto-pause, focus mode, ambient noise, and 20-20-20 eye rest — all in one place.",
-			],
-			[
-				"03",
-				"Avid Readers",
-				"Track sessions, WPM trends, streaks, and daily word targets. Your reading history stays in your browser — no cloud, no sync, just data.",
-			],
-			[
-				"04",
-				"Writers & Professionals",
-				"Run your own drafts through RSVP to catch pacing issues and awkward phrasing. Import DOCX, TXT, or Markdown and read at speed.",
-			],
-		];
+		const PERSONAS = [
+			["01", "personaStudentsTitle", "personaStudentsDescription"],
+			["02", "personaNeurodivergentTitle", "personaNeurodivergentDescription"],
+			["03", "personaReadersTitle", "personaReadersDescription"],
+			["04", "personaWritersTitle", "personaWritersDescription"],
+		] as const;
 		return PERSONAS.map(
 			([num, title, desc]) => html`
         <div class="rounded-2xl border border-base-200 p-6 flex flex-col gap-3 hover:border-primary/30 transition-colors" data-reveal>
           <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary font-mono text-xs font-semibold select-none" aria-hidden="true">${num}</span>
-          <h3 class="text-ui-title font-semibold text-base-content">${title}</h3>
-          <p class="text-ui-body text-ui-muted leading-[1.85]">${desc}</p>
+		  <h3 class="text-ui-title font-semibold text-base-content">${this.i18n.t(`landing.${title}`)}</h3>
+		  <p class="text-ui-body text-ui-muted leading-[1.85]">${this.i18n.t(`landing.${desc}`)}</p>
         </div>
       `,
 		);
 	}
 
 	private renderComparisonRows() {
-		type Row = [string, true | string, boolean | string, boolean | string];
-		const ROWS: Row[] = [
-			["Free to use", true, "Freemium", "Subscription"],
-			["Open source", true, false, false],
-			["PDF / EPUB import", true, "Limited", true],
-			["No account required", true, false, false],
-			["Local-first / private", true, false, false],
-			["ADHD / Dyslexia modes", true, false, false],
-			["Bionic Reading", true, false, false],
-			["Pomodoro timer", true, false, false],
-			["ORP alignment", true, false, false],
-			["PWA / offline", true, false, false],
+		type Row = [
+			MessageKey,
+			true | MessageKey,
+			boolean | MessageKey,
+			boolean | MessageKey,
 		];
-		const cell = (val: boolean | string) => {
+		const ROWS: Row[] = [
+			[
+				"landing.comparisonFree",
+				true,
+				"landing.comparisonFreemium",
+				"landing.comparisonSubscription",
+			],
+			["landing.comparisonOpenSource", true, false, false],
+			["landing.comparisonImport", true, "landing.comparisonLimited", true],
+			["landing.comparisonNoAccount", true, false, false],
+			["landing.comparisonPrivate", true, false, false],
+			["landing.comparisonAccessibility", true, false, false],
+			["landing.comparisonBionic", true, false, false],
+			["landing.comparisonPomodoro", true, false, false],
+			["landing.comparisonOrp", true, false, false],
+			["landing.comparisonOffline", true, false, false],
+		];
+		const cell = (val: boolean | MessageKey) => {
 			if (val === true)
-				return html`<span class="text-success font-bold text-base" aria-label="Yes">✓</span>`;
+				return html`<span class="text-success font-bold text-base" aria-label=${this.i18n.t("landing.yes")}>✓</span>`;
 			if (val === false)
-				return html`<span class="text-ui-muted-subtle text-sm" aria-label="No">—</span>`;
-			return html`<span class="text-xs text-ui-muted">${val}</span>`;
+				return html`<span class="text-ui-muted-subtle text-sm" aria-label=${this.i18n.t("landing.no")}>—</span>`;
+			return html`<span class="text-xs text-ui-muted">${this.i18n.t(val)}</span>`;
 		};
 		return ROWS.map(
 			([feat, speeedy, spreeder, readwise]) => html`
         <tr class="border-b border-base-200/50 hover:bg-base-200/20 transition-colors">
-          <td class="py-3 pr-6 text-ui-muted">${feat}</td>
+		  <td class="py-3 pr-6 text-ui-muted">${this.i18n.t(feat)}</td>
           <td class="py-3 px-4 text-center">${cell(speeedy)}</td>
           <td class="py-3 px-4 text-center">${cell(spreeder)}</td>
           <td class="py-3 px-4 text-center hidden sm:table-cell">${cell(readwise)}</td>
@@ -268,7 +241,9 @@ export class MarketingPage extends LitElement {
 		const effectiveTheme = theme === "system" ? getResolvedTheme(theme) : theme;
 		const badgeUrls = this.getBadgeUrls(effectiveTheme);
 		const themeTitle =
-			effectiveTheme === "dark" ? "Switch to light" : "Switch to dark";
+			effectiveTheme === "dark"
+				? this.i18n.t("landing.switchToLight")
+				: this.i18n.t("landing.switchToDark");
 
 		return html`
       <div class="min-h-screen flex flex-col bg-base-100 overflow-x-hidden">
@@ -277,17 +252,17 @@ export class MarketingPage extends LitElement {
         <nav class="sticky top-0 z-50 px-6 md:px-12 py-4 flex items-center justify-between border-b border-base-300/60 bg-base-100/90 backdrop-blur-md">
           <div class="flex items-center gap-2">
             ${icon(Zap, "w-4 h-4 text-primary")}
-            <span class="text-ui-body tracking-[0.25em] font-semibold text-base-content select-none uppercase">speeedy</span>
+            <span class="text-ui-body tracking-[0.25em] font-semibold text-base-content select-none uppercase">${this.i18n.t("landing.speeedy")}</span>
           </div>
           <div class="flex items-center gap-2">
-            <a href=${GITHUB_URL} target="_blank" rel="noopener" class="btn btn-ghost btn-sm btn-circle" title="GitHub" aria-label="GitHub">
+            <a href=${GITHUB_URL} target="_blank" rel="noopener" class="btn btn-ghost btn-sm btn-circle" title=${this.i18n.t("landing.github")} aria-label=${this.i18n.t("landing.github")}>
               ${githubIcon("w-6 h-6")}
             </a>
             <button class="btn btn-ghost btn-sm btn-circle" title=${themeTitle} @click=${this.cycleTheme} type="button">
               ${this.themeIcon(theme)}
             </button>
             <a href="#/app" class="btn btn-primary btn-sm rounded-full px-5 gap-1.5">
-              Open app ${icon(ArrowRight, "w-3.5 h-3.5")}
+              ${this.i18n.t("landing.openApp")} ${icon(ArrowRight, "w-3.5 h-3.5")}
             </a>
           </div>
         </nav>
@@ -308,18 +283,18 @@ export class MarketingPage extends LitElement {
 
             <div data-hero-item class="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-4 py-1.5 text-ui-body tracking-[0.35em] uppercase text-primary font-semibold mkt-badge-shimmer">
               ${icon(Zap, "w-3 h-3 text-primary")}
-              Rapid Serial Visual Presentation
+              ${this.i18n.t("landing.rsvpExpanded")}
             </div>
 
             <h1 data-hero-item class="mb-6 select-none text-ui-hero font-semibold text-base-content" style="letter-spacing: -0.02em;">
-              <span class="block text-ui-muted-subtle font-normal">Read at</span>
+              <span class="block text-ui-muted-subtle font-normal">${this.i18n.t("landing.readAt")}</span>
               <span class="block font-mono">
-                light<span class="text-primary">_</span>speed
+                ${this.i18n.t("landing.light")}<span class="text-primary">_</span>${this.i18n.t("landing.speed")}
               </span>
             </h1>
 
             <p data-hero-item class="text-ui-body text-ui-muted max-w-sm mb-10">
-              One word. One fixed point.<br/>No eye movement. No distractions.
+              ${this.i18n.t("landing.heroLineOne")}<br/>${this.i18n.t("landing.heroLineTwo")}
             </p>
 
             <div data-hero-item class="w-full max-w-2xl mb-10 rounded-2xl border border-primary/15 bg-base-100/5 backdrop-blur-sm px-8 py-10 overflow-hidden"
@@ -335,16 +310,16 @@ export class MarketingPage extends LitElement {
                 data-umami-event="marketing-app-click"
                 class="btn btn-primary btn-lg rounded-full px-12 gap-2 mkt-cta-glow"
                 style="box-shadow: 0 0 30px color-mix(in oklab, var(--color-primary) 35%, transparent), 0 4px 16px color-mix(in oklab, var(--color-primary) 20%, transparent);">
-                Start reading free ${icon(ArrowRight, "w-4 h-4")}
+                ${this.i18n.t("landing.startReadingFree")} ${icon(ArrowRight, "w-4 h-4")}
               </a>
               <span class="flex items-center gap-2">
                 <a href="#/benchmark"
                   data-umami-event="marketing-benchmark-click"
                   class="btn btn-ghost btn-lg text-ui-muted hover:text-base-content text-ui-body">
-                  Take the speed test
+                  ${this.i18n.t("landing.takeSpeedTest")}
                 </a>
                 <span class="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[0.65rem] font-semibold tracking-wide uppercase text-primary/80">
-                  Recommended
+                  ${this.i18n.t("landing.recommended")}
                 </span>
               </span>
             </div>
@@ -352,19 +327,19 @@ export class MarketingPage extends LitElement {
             <div data-hero-item class="mt-8 flex flex-wrap items-center justify-center gap-2">
               <span class="inline-flex items-center gap-1.5 rounded-full border border-base-content/15 bg-base-content/5 px-3 py-1 text-ui-body tracking-wide text-ui-muted font-normal">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500/70 inline-block"></span>
-                Free forever
+                ${this.i18n.t("landing.freeForever")}
               </span>
               <span class="inline-flex items-center gap-1.5 rounded-full border border-base-content/15 bg-base-content/5 px-3 py-1 text-ui-body tracking-wide text-ui-muted font-normal">
                 <span class="w-1.5 h-1.5 rounded-full bg-sky-400/70 inline-block"></span>
-                No account
+                ${this.i18n.t("landing.noAccount")}
               </span>
               <span class="inline-flex items-center gap-1.5 rounded-full border border-base-content/15 bg-base-content/5 px-3 py-1 text-ui-body tracking-wide text-ui-muted font-normal">
                 <span class="w-1.5 h-1.5 rounded-full bg-violet-400/70 inline-block"></span>
-                Open source · MIT
+                ${this.i18n.t("landing.openSourceMit")}
               </span>
               <span class="inline-flex items-center gap-1.5 rounded-full border border-base-content/15 bg-base-content/5 px-3 py-1 text-ui-body tracking-wide text-ui-muted font-normal">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-400/70 inline-block"></span>
-                Reading data stays local
+                ${this.i18n.t("landing.dataStaysLocal")}
               </span>
             </div>
           </div>
@@ -381,18 +356,18 @@ export class MarketingPage extends LitElement {
                 <span class="text-ui-hero font-semibold tabular-nums leading-none font-mono"
                   style="color: oklch(0.72 0.14 55);"
                   data-count-to="238" data-count-display="238">238</span>
-                <span class="text-ui-title font-normal mb-1 text-base-content">WPM</span>
+                <span class="text-ui-title font-normal mb-1 text-base-content">${this.i18n.t("landing.wpm")}</span>
               </div>
-              <p class="text-ui-body text-ui-muted tracking-wide">average adult reading speed</p>
+              <p class="text-ui-body text-ui-muted tracking-wide">${this.i18n.t("landing.averageAdultSpeed")}</p>
             </div>
 
             <div class="py-14 px-10 flex flex-col items-center sm:items-start gap-1 bg-primary/5" data-reveal>
               <div class="flex items-end gap-2">
                 <span class="text-ui-hero font-semibold tabular-nums leading-none font-mono text-primary"
                   data-count-to="400" data-count-display="400+">400+</span>
-                <span class="text-ui-title font-normal mb-1 text-primary/80">WPM</span>
+                <span class="text-ui-title font-normal mb-1 text-primary/80">${this.i18n.t("landing.wpm")}</span>
               </div>
-              <p class="text-ui-body text-ui-muted tracking-wide">with consistent RSVP practice</p>
+              <p class="text-ui-body text-ui-muted tracking-wide">${this.i18n.t("landing.withRsvpPractice")}</p>
             </div>
 
             <div class="py-14 px-10 flex flex-col items-center sm:items-start gap-1" data-reveal>
@@ -401,12 +376,12 @@ export class MarketingPage extends LitElement {
                   style="color: oklch(0.72 0.08 195);"
                   data-count-to="10" data-count-display="~10%">~10%</span>
               </div>
-              <p class="text-ui-body text-ui-muted tracking-wide">of reading time is pure eye movement</p>
+              <p class="text-ui-body text-ui-muted tracking-wide">${this.i18n.t("landing.eyeMovementTime")}</p>
             </div>
 
           </div>
           <div class="px-10 py-4 border-t border-base-300/50">
-            <p class="text-ui-body text-ui-muted-subtle italic">Brysbaert (2019) · Rayner et al. (2016) · Masson (1983)</p>
+            <p class="text-ui-body text-ui-muted-subtle italic">${this.i18n.t("landing.researchSources")}</p>
           </div>
         </section>
 
@@ -416,23 +391,22 @@ export class MarketingPage extends LitElement {
 
             <!-- Left: explanation -->
             <div data-reveal>
-              <p class="text-ui-body tracking-[0.35em] uppercase mb-4 font-semibold text-primary/90">The pivot</p>
+              <p class="text-ui-body tracking-[0.35em] uppercase mb-4 font-semibold text-primary/90">${this.i18n.t("landing.pivot")}</p>
               <h2 class="text-ui-hero font-semibold text-base-content leading-tight mb-5">
-                Every word has<br/><span class="font-semibold">a sweet spot.</span>
+                ${this.i18n.t("landing.everyWordHas")}<br/><span class="font-semibold">${this.i18n.t("landing.sweetSpot")}</span>
               </h2>
               <p class="text-ui-body text-ui-muted leading-[1.9] mb-4">
-                O'Regan and Jacobs (1992) showed that word recognition is fastest when your eye lands on a specific letter —
-                typically 1–2 letters left of center. Speeedy aligns every word on this
-                <strong class="font-semibold text-base-content">Optimal Recognition Point</strong> so your brain processes each flash with less effort.
+                ${this.i18n.t("landing.orpExplanationBefore")}
+                <strong class="font-semibold text-base-content">${this.i18n.t("landing.optimalRecognitionPoint")}</strong>${this.i18n.t("landing.orpExplanationAfter")}
               </p>
               <a href="#/learn" class="text-ui-body text-primary underline underline-offset-2 hover:decoration-2">
-                Read the full science →
+                ${this.i18n.t("landing.readScience")}
               </a>
             </div>
 
             <!-- Right: interactive ORP demo -->
             <div data-reveal>
-              <speeedy-orp-demo tone="accent" hint="hover any word"></speeedy-orp-demo>
+              <speeedy-orp-demo tone="accent" hint=${this.i18n.t("landing.hoverAnyWord")}></speeedy-orp-demo>
             </div>
           </div>
         </section>
@@ -442,13 +416,13 @@ export class MarketingPage extends LitElement {
           <div class="max-w-5xl mx-auto">
             <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
               <div>
-                <p class="text-ui-body tracking-[0.35em] uppercase text-primary/80 mb-3 font-semibold" data-reveal>What's inside</p>
+                <p class="text-ui-body tracking-[0.35em] uppercase text-primary/80 mb-3 font-semibold" data-reveal>${this.i18n.t("landing.whatsInside")}</p>
                 <h2 class="text-ui-hero font-semibold text-base-content leading-tight" data-reveal>
-                  Eight features.<br/><span class="font-semibold">Zero bloat.</span>
+                  ${this.i18n.t("landing.eightFeatures")}<br/><span class="font-semibold">${this.i18n.t("landing.zeroBloat")}</span>
                 </h2>
               </div>
               <a href="#/app" class="btn btn-outline btn-sm rounded-full px-6 self-start md:self-end shrink-0" data-reveal>
-                Open the reader →
+                ${this.i18n.t("landing.openReader")}
               </a>
             </div>
 
@@ -469,9 +443,9 @@ export class MarketingPage extends LitElement {
                   <div class="min-w-0 flex-1">
                     <div class="flex items-baseline gap-2.5 mb-1">
                       <span class="text-ui-body font-mono select-none transition-colors duration-200 group-hover:text-primary/70 text-ui-muted-subtle">${String(i + 1).padStart(2, "0")}</span>
-                      <h3 class="text-ui-title font-semibold text-base-content transition-colors duration-200 group-hover:text-primary">${title}</h3>
+                      <h3 class="text-ui-title font-semibold text-base-content transition-colors duration-200 group-hover:text-primary">${this.i18n.t(`landing.${title}`)}</h3>
                     </div>
-                    <p class="text-ui-body text-ui-muted leading-[1.85]">${desc}</p>
+                    <p class="text-ui-body text-ui-muted leading-[1.85]">${this.i18n.t(`landing.${desc}`)}</p>
                   </div>
                 </div>
               `,
@@ -484,9 +458,9 @@ export class MarketingPage extends LitElement {
         <section class="py-24 px-6 md:px-12 border-b border-base-300/60">
           <div class="max-w-5xl mx-auto">
             <div class="mb-14" data-reveal>
-              <p class="text-ui-body tracking-[0.35em] uppercase text-primary/80 mb-3 font-semibold">Who it's for</p>
+              <p class="text-ui-body tracking-[0.35em] uppercase text-primary/80 mb-3 font-semibold">${this.i18n.t("landing.whoItsFor")}</p>
               <h2 class="text-ui-hero font-semibold text-base-content leading-tight">
-                Built for every kind<br/><span class="font-semibold">of reader.</span>
+                ${this.i18n.t("landing.builtForEveryKind")}<br/><span class="font-semibold">${this.i18n.t("landing.ofReader")}</span>
               </h2>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -499,19 +473,19 @@ export class MarketingPage extends LitElement {
         <section class="py-24 px-6 md:px-12 border-b border-base-300/60 bg-base-200/25">
           <div class="max-w-4xl mx-auto">
             <div class="mb-12" data-reveal>
-              <p class="text-ui-body tracking-[0.35em] uppercase text-primary/80 mb-3 font-semibold">How it compares</p>
+              <p class="text-ui-body tracking-[0.35em] uppercase text-primary/80 mb-3 font-semibold">${this.i18n.t("landing.howItCompares")}</p>
               <h2 class="text-ui-hero font-semibold text-base-content leading-tight">
-                Free, open, and<br/><span class="font-semibold">more capable.</span>
+                ${this.i18n.t("landing.freeOpenAnd")}<br/><span class="font-semibold">${this.i18n.t("landing.moreCapable")}</span>
               </h2>
             </div>
             <div class="overflow-x-auto" data-reveal>
               <table class="w-full text-ui-body border-collapse">
                 <thead>
                   <tr class="border-b border-base-300/60">
-                    <th class="text-left py-3 pr-6 text-ui-muted font-medium text-xs uppercase tracking-widest w-1/2">Feature</th>
-                    <th class="py-3 px-4 text-center text-ui-body font-semibold text-primary text-sm">Speeedy</th>
-                    <th class="py-3 px-4 text-center text-ui-muted font-normal text-sm">Spreeder</th>
-                    <th class="py-3 px-4 text-center text-ui-muted font-normal text-sm hidden sm:table-cell">Readwise Reader</th>
+                    <th class="text-left py-3 pr-6 text-ui-muted font-medium text-xs uppercase tracking-widest w-1/2">${this.i18n.t("landing.feature")}</th>
+                    <th class="py-3 px-4 text-center text-ui-body font-semibold text-primary text-sm">${this.i18n.t("landing.speeedy")}</th>
+                    <th class="py-3 px-4 text-center text-ui-muted font-normal text-sm">${this.i18n.t("landing.spreeder")}</th>
+                    <th class="py-3 px-4 text-center text-ui-muted font-normal text-sm hidden sm:table-cell">${this.i18n.t("landing.readwiseReader")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -520,7 +494,7 @@ export class MarketingPage extends LitElement {
               </table>
             </div>
             <p class="text-[0.7rem] text-ui-muted-subtle mt-4 italic" data-reveal>
-              Comparison based on publicly available information. Last reviewed April 2026.
+              ${this.i18n.t("landing.comparisonDisclaimer")}
             </p>
           </div>
         </section>
@@ -529,31 +503,30 @@ export class MarketingPage extends LitElement {
           <div class="max-w-3xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 items-center">
               <div>
-                <p class="text-ui-body tracking-[0.35em] uppercase text-primary/80 mb-4 font-semibold" data-reveal>Optional but worth it</p>
+                <p class="text-ui-body tracking-[0.35em] uppercase text-primary/80 mb-4 font-semibold" data-reveal>${this.i18n.t("landing.optionalWorthIt")}</p>
                 <h2 class="text-ui-hero font-semibold text-base-content leading-tight mb-4" data-reveal>
-                  Know your<br/><span class="font-semibold">starting point.</span>
+                  ${this.i18n.t("landing.knowYour")}<br/><span class="font-semibold">${this.i18n.t("landing.startingPoint")}</span>
                 </h2>
                 <p class="text-ui-body text-ui-muted max-w-sm mb-8" data-reveal>
-                  If you're serious about improving, a 3-minute baseline tells you exactly where you stand —
-                  your WPM and comprehension, saved locally so you can track progress over time.
+                  ${this.i18n.t("landing.baselineDescription")}
                 </p>
                 <div class="flex flex-wrap gap-3" data-reveal>
                   <a href="#/benchmark" data-cta-btn
                     data-umami-event="marketing-benchmark-click"
                     class="btn btn-primary btn-lg rounded-full px-12 gap-2 mkt-cta-glow">
-                    Take the reading test ${icon(ArrowRight, "w-4 h-4")}
+                    ${this.i18n.t("landing.takeReadingTest")} ${icon(ArrowRight, "w-4 h-4")}
                   </a>
                 </div>
-                <p class="text-ui-body text-ui-muted-subtle mt-4" data-reveal>~3 minutes · no timer · no pressure</p>
+                <p class="text-ui-body text-ui-muted-subtle mt-4" data-reveal>${this.i18n.t("landing.testDetails")}</p>
                 <a href="#/app" class="inline-block mt-3 text-ui-body text-ui-muted-subtle hover:text-ui-muted transition-colors underline-offset-2 hover:underline" data-reveal>
-                  No thanks — just open the reader →
+                  ${this.i18n.t("landing.noThanks")}
                 </a>
               </div>
               <div class="hidden md:flex flex-col items-center select-none text-primary/25" aria-hidden="true">
                 <span class="font-semibold tabular-nums font-mono text-ui-hero" style="font-size: 5rem; line-height: 1;">
                   ?
                 </span>
-                <span class="text-ui-body font-semibold tracking-widest uppercase text-ui-muted-subtle">WPM</span>
+                <span class="text-ui-body font-semibold tracking-widest uppercase text-ui-muted-subtle">${this.i18n.t("landing.wpm")}</span>
               </div>
             </div>
           </div>
@@ -562,20 +535,20 @@ export class MarketingPage extends LitElement {
         <section class="py-16 px-6 md:px-12 border-b border-base-300/60 bg-base-200/25">
           <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
             <div data-reveal>
-              <p class="text-ui-body tracking-[0.35em] uppercase text-primary/80 mb-3 font-semibold">Open source</p>
+              <p class="text-ui-body tracking-[0.35em] uppercase text-primary/80 mb-3 font-semibold">${this.i18n.t("landing.openSource")}</p>
               <h2 class="text-ui-hero font-semibold text-base-content leading-tight mb-3">
-                MIT license, public repo.
+                ${this.i18n.t("landing.mitPublicRepo")}
               </h2>
               <p class="text-ui-body text-ui-muted leading-relaxed max-w-md">
-                Source is on GitHub. No ads or paid tiers, no tracking cookies. Reading data stays in your browser unless you export it.
+                ${this.i18n.t("landing.openSourceDescription")}
               </p>
             </div>
             <div class="flex flex-wrap gap-3 shrink-0" data-reveal>
               <a href=${GITHUB_URL} target="_blank" rel="noopener" class="btn btn-outline btn-sm rounded-full px-7 gap-2">
-                ${githubIcon("w-3.5 h-3.5")} View on GitHub
+                ${githubIcon("w-3.5 h-3.5")} ${this.i18n.t("landing.viewOnGitHub")}
               </a>
               <a href="#/donate" class="btn btn-outline border-error/40 text-error hover:bg-error/10 hover:border-error btn-sm rounded-full px-7 gap-2">
-                ${icon(Heart, "w-3.5 h-3.5")} Donate
+                ${icon(Heart, "w-3.5 h-3.5")} ${this.i18n.t("landing.donate")}
               </a>
             </div>
           </div>
@@ -588,41 +561,41 @@ export class MarketingPage extends LitElement {
               <div class="col-span-2 sm:col-span-1">
                 <div class="flex items-center gap-2 mb-2">
                   ${icon(Zap, "w-3.5 h-3.5 text-primary")}
-                  <span class="text-ui-body tracking-[0.25em] font-semibold text-base-content uppercase select-none">speeedy</span>
+                  <span class="text-ui-body tracking-[0.25em] font-semibold text-base-content uppercase select-none">${this.i18n.t("landing.speeedy")}</span>
                 </div>
                 <p class="text-ui-body text-ui-muted leading-relaxed max-w-[18ch]">
-                  Open-source RSVP speed reader. No account, no ads, no tracking.
+                  ${this.i18n.t("landing.footerDescription")}
                 </p>
               </div>
               <div class="flex flex-col gap-2.5">
-                <span class="text-ui-body uppercase tracking-widest text-ui-muted-subtle font-semibold">Product</span>
-                <a href="#/app" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">App</a>
-                <a href="#/benchmark" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">Reading Test</a>
-                <a href="#/learn" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">How it works</a>
-                <a href="#/promote" class="text-ui-body text-ui-muted hover:text-base-content transition-colors underline decoration-primary/30 underline-offset-4">Speeedy for Bloggers</a>
-                <a href="#/changelog" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">Changelog</a>
+                <span class="text-ui-body uppercase tracking-widest text-ui-muted-subtle font-semibold">${this.i18n.t("landing.product")}</span>
+                <a href="#/app" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">${this.i18n.t("landing.app")}</a>
+                <a href="#/benchmark" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">${this.i18n.t("landing.readingTest")}</a>
+                <a href="#/learn" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">${this.i18n.t("landing.howItWorks")}</a>
+                <a href="#/promote" class="text-ui-body text-ui-muted hover:text-base-content transition-colors underline decoration-primary/30 underline-offset-4">${this.i18n.t("landing.forBloggers")}</a>
+                <a href="#/changelog" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">${this.i18n.t("landing.changelog")}</a>
               </div>
               <div class="flex flex-col gap-2.5">
-                <span class="text-ui-body uppercase tracking-widest text-ui-muted-subtle font-semibold">Project</span>
-                <a href=${GITHUB_URL} target="_blank" rel="noopener" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">GitHub</a>
-                <a href="#/donate" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">Support</a>
-                <a href="#/privacy" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">Privacy</a>
-                <a href="#/terms" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">Terms</a>
+                <span class="text-ui-body uppercase tracking-widest text-ui-muted-subtle font-semibold">${this.i18n.t("landing.project")}</span>
+                <a href=${GITHUB_URL} target="_blank" rel="noopener" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">${this.i18n.t("landing.github")}</a>
+                <a href="#/donate" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">${this.i18n.t("landing.support")}</a>
+                <a href="#/privacy" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">${this.i18n.t("landing.privacy")}</a>
+                <a href="#/terms" class="text-ui-body text-ui-muted hover:text-base-content transition-colors">${this.i18n.t("landing.terms")}</a>
               </div>
             </div>
             <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-base-300/50">
               <p class="text-ui-body text-ui-muted-subtle">
-                MIT License · No ads · No cookies · No account required
+                ${this.i18n.t("landing.licenseSummary")}
               </p>
               <div class="flex flex-wrap items-center justify-center gap-6">
                 <a href="https://ufind.best/products/speeedy?utm_source=ufind.best" target="_blank" rel="noopener">
-                  <img src=${badgeUrls.ufind} alt="Featured on ufind.best" width="100" />
+                  <img src=${badgeUrls.ufind} alt=${this.i18n.t("landing.featuredOnUfind")} width="100" />
                 </a>
                 <a href="https://www.producthunt.com/products/speeedy?utm_source=other&utm_medium=social" target="_blank" rel="noopener">
-                  <img src=${badgeUrls.productHunt} alt="Speeedy - Featured on Product Hunt" width="140" style="height: 30px;" />
+                  <img src=${badgeUrls.productHunt} alt=${this.i18n.t("landing.featuredOnProductHunt")} width="140" style="height: 30px;" />
                 </a>
                 <a href="https://alternativeto.net/software/speeedy/" target="_blank" rel="noopener" class="text-ui-body text-ui-muted-subtle hover:text-ui-muted transition-colors text-xs underline underline-offset-2">
-                  Listed on AlternativeTo
+                  ${this.i18n.t("landing.listedOnAlternativeTo")}
                 </a>
               </div>
             </div>
