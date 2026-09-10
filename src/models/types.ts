@@ -1,3 +1,5 @@
+import type { Locale } from "../i18n/index.js";
+
 export type Route =
 	| "landing"
 	| "app"
@@ -144,6 +146,8 @@ export interface UserProfile {
 	baselineWpm: number | null;
 	baselineComprehension: number | null;
 	onboardingSeen: boolean;
+	/** UI language. Optional so profiles saved before i18n keep working (falls back to pt-BR). */
+	locale?: Locale;
 	githubStarPromptDismissed?: boolean;
 	donationNudgeDismissedAt?: string | null;
 	donationNudgeDismissedAtSessionCount?: number;
