@@ -323,6 +323,23 @@ Um adulto lê, em média, cerca de duzentas e trinta e oito palavras por minuto.
 		processImageError:
 			"Não foi possível processar essa imagem. Tente usar um arquivo menor.",
 	},
+	onboarding: {
+		previewText: "O Speeedy ajuda você a ler mais rápido ao focar no núcleo de cada palavra.",
+		welcomeTitle: "Boas-vindas ao Speeedy",
+		welcomeDescription: "Duas opções rápidas e você já pode começar.",
+		getStarted: "Começar",
+		personalizeDisplay: "Personalize a exibição",
+		accessibilityDescription: "Ferramentas opcionais de acessibilidade para foco e legibilidade.",
+		dyslexiaSupport: "Suporte para dislexia",
+		dyslexiaSupportDescription: "Fonte otimizada (OpenDyslexic) e espaçamento.",
+		bionicReading: "Leitura biônica",
+		bionicReadingDescription: "Pontos de foco para guiar seus olhos.",
+		livePreview: "Prévia ao vivo",
+		continue: "Continuar",
+		allSet: "Tudo pronto!",
+		settingsLater: "Você pode alterar essas configurações depois no painel de configurações.",
+		finish: "Finalizar",
+	},
 	errors: {
 		genericTitle: "Algo deu errado",
 		offline:

@@ -10,13 +10,13 @@ import { applyBionicReading } from "../services/text-parser.js";
 import { trackEvent } from "../utils/analytics.js";
 import { emitProfileUpdated } from "../utils/events.js";
 import { icon } from "../utils/icons.js";
+import { LocaleController } from "../i18n/controller.js";
 import "./ui/dialog.js";
-
-const PREVIEW_TEXT =
-	"Speeedy helps you read faster by focusing on the core of each word.";
 
 @customElement("onboarding-modal")
 export class OnboardingModal extends LitElement {
+	private i18n = new LocaleController(this);
+
 	protected override createRenderRoot() {
 		return this;
 	}
@@ -67,7 +67,7 @@ export class OnboardingModal extends LitElement {
 
 	private initDemo() {
 		const settings = this.getDemoSettings();
-		this.demoEngine.load(PREVIEW_TEXT, settings);
+		this.demoEngine.load(this.i18n.t("onboarding.previewText"), settings);
 		this.demoEngine.on("word", (s) => {
 			this.demoState = s;
 		});
@@ -171,7 +171,7 @@ export class OnboardingModal extends LitElement {
             data-umami-event="onboarding-skip"
             @click=${this.skip}
           >
-            Skip
+            ${this.i18n.t("common.skip")}
           </button>
 
           <div class="p-8 sm:p-10 flex flex-col items-center text-center">
@@ -196,20 +196,20 @@ export class OnboardingModal extends LitElement {
           <div class="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 shadow-inner border border-primary/20">
             ${icon(Zap, "w-9 h-9 text-primary")}
           </div>
-          <h2 class="text-3xl font-semibold mb-3 tracking-tight">Welcome to Speeedy</h2>
+          <h2 class="text-3xl font-semibold mb-3 tracking-tight">${this.i18n.t("onboarding.welcomeTitle")}</h2>
           <p class="text-base-content/60 font-light leading-relaxed mb-8">
-            Two quick options, then you're in.
+            ${this.i18n.t("onboarding.welcomeDescription")}
           </p>
           <button @click=${this.handleNext} class="btn btn-primary btn-lg rounded-2xl px-12 shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
-            Get Started
+            ${this.i18n.t("onboarding.getStarted")}
           </button>
         `;
 			case "dyslexia":
 				return html`
           <div class="w-full text-left">
-            <h2 class="text-2xl font-semibold mb-2 tracking-tight">Personalize Display</h2>
+            <h2 class="text-2xl font-semibold mb-2 tracking-tight">${this.i18n.t("onboarding.personalizeDisplay")}</h2>
             <p class="text-sm text-base-content/50 font-light mb-6">
-              Optional accessibility tools for focus and readability.
+              ${this.i18n.t("onboarding.accessibilityDescription")}
             </p>
 
             <div class="flex flex-col gap-4">
@@ -218,8 +218,8 @@ export class OnboardingModal extends LitElement {
                 class="group p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-4 ${this.dyslexiaMode ? "border-primary bg-primary/5" : "border-base-200"}"
               >
                 <div class="flex-1">
-                  <div class="font-medium text-base">Dyslexia Support</div>
-                  <div class="text-xs text-base-content/50 font-light">Optimized font (OpenDyslexic) and spacing.</div>
+                  <div class="font-medium text-base">${this.i18n.t("onboarding.dyslexiaSupport")}</div>
+                  <div class="text-xs text-base-content/50 font-light">${this.i18n.t("onboarding.dyslexiaSupportDescription")}</div>
                 </div>
                 <input 
                   type="checkbox" 
@@ -234,8 +234,8 @@ export class OnboardingModal extends LitElement {
                 class="group p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-4 ${this.bionicMode ? "border-primary bg-primary/5" : "border-base-200"}"
               >
                 <div class="flex-1">
-                  <div class="font-medium text-base">Bionic Reading</div>
-                  <div class="text-xs text-base-content/50 font-light">Focus points to guide your eyes.</div>
+                  <div class="font-medium text-base">${this.i18n.t("onboarding.bionicReading")}</div>
+                  <div class="text-xs text-base-content/50 font-light">${this.i18n.t("onboarding.bionicReadingDescription")}</div>
                 </div>
                 <input 
                   type="checkbox" 
@@ -248,12 +248,12 @@ export class OnboardingModal extends LitElement {
 
             <!-- Preview Section -->
             <div class="mt-8 p-6 rounded-2xl bg-base-200/50 border border-base-200 overflow-hidden flex items-center justify-center min-h-[140px] w-full relative">
-              <div class="text-[10px] absolute top-4 left-6 uppercase tracking-widest text-base-content/30 font-bold mb-3">Live Preview</div>
+              <div class="text-[10px] absolute top-4 left-6 uppercase tracking-widest text-base-content/30 font-bold mb-3">${this.i18n.t("onboarding.livePreview")}</div>
               ${this.renderPreviewWord()}
             </div>
 
             <button @click=${this.handleNext} class="btn btn-primary btn-block btn-lg rounded-2xl border-none shadow-lg shadow-primary/20 mt-8 hover:scale-[1.01] active:scale-[0.99] transition-all">
-              Continue
+              ${this.i18n.t("onboarding.continue")}
             </button>
           </div>
         `;
@@ -262,13 +262,13 @@ export class OnboardingModal extends LitElement {
           <div class="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mb-6 text-2xl text-success">
             ✓
           </div>
-          <h2 class="text-2xl font-semibold mb-3 tracking-tight">You're all set!</h2>
+          <h2 class="text-2xl font-semibold mb-3 tracking-tight">${this.i18n.t("onboarding.allSet")}</h2>
           <p class="text-base-content/60 font-light leading-relaxed mb-8">
-            You can always change these settings later in the settings panel.
+            ${this.i18n.t("onboarding.settingsLater")}
           </p>
           <div class="grid grid-cols-2 gap-3 w-full">
-            <button @click=${() => (this.step = "dyslexia")} class="btn btn-ghost rounded-2xl">Back</button>
-            <button @click=${this.complete} class="btn btn-primary rounded-2xl shadow-lg shadow-primary/20">Finish</button>
+            <button @click=${() => (this.step = "dyslexia")} class="btn btn-ghost rounded-2xl">${this.i18n.t("common.back")}</button>
+            <button @click=${this.complete} class="btn btn-primary rounded-2xl shadow-lg shadow-primary/20">${this.i18n.t("onboarding.finish")}</button>
           </div>
         `;
 		}
