@@ -1,4 +1,4 @@
-export const SITE_URL = "https://speeedy.pages.dev";
+export const SITE_URL = "https://speeedy-2vc.pages.dev";
 export const SITE_NAME = "Speeedy";
 export const GITHUB_URL = "https://github.com/sami-29/speeedy";
 

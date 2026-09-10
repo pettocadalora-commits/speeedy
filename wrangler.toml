@@ -3,3 +3,9 @@ compatibility_date = "2026-03-10"
 
 [assets]
 directory = "./dist"
+
+# Zero-knowledge sync vault (docs/cloud-sync.md). Values are client-encrypted
+# blobs; the namespace holds no readable user data.
+[[kv_namespaces]]
+binding = "SPEEDY_SYNC"
+id = "541046511d354f5f8d2f2039bb03d0f1"
