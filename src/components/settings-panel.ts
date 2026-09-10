@@ -7,46 +7,11 @@ import type {
 	ThemeName,
 } from "../models/types.js";
 import { getResolvedTheme } from "../services/theme-service.js";
+import { LocaleController } from "../i18n/controller.js";
 import { trackEvent } from "../utils/analytics.js";
 import "./ui/range.js";
 import "./ui/segmented.js";
 import "./ui/toggle.js";
-
-const TOOLTIPS = {
-	sentencePause:
-		"Extra duration after periods, question marks, and exclamation points.",
-	paragraphPause: "Extra delay when a new paragraph begins.",
-	letterSpacing: "Adjust the horizontal space between characters.",
-	pivotOffset:
-		"Nudges the focus point left or right if you prefer eye-fixation off-center.",
-	speedRamp:
-		"Slowly accelerates the speed at the start of a session so your brain can adjust.",
-	bionicMode: "Bold the first few letters of each word to guide the eye.",
-	smartSpeed:
-		"Varies the duration of each word based on its character length (longer words dwell longer).",
-	peripheralContext:
-		"Shows a ghost of the previous and next words to help stay oriented.",
-	orpGuides:
-		"Small markers above and below the focus point to help lock your gaze.",
-	colorizeQuotes:
-		"Apply a distinct color to words inside double quotes (dialogue).",
-	colorizeParens:
-		"Apply a distinct color to words inside parentheses or square brackets (asides).",
-	irlenMode:
-		"Color overlays to reduce visual stress and improve focus (Irlen Syndrome).",
-	dyslexiaMode:
-		"Uses OpenDyslexic, a font designed to improve readability for neurodivergent readers.",
-	contextPauseOnClose:
-		"Slight extra pause after closing ) or ] to help process the phrase.",
-	commaAsPause:
-		"Treat commas with the same weighted pause as full sentence ends.",
-	countdown: "Show a 3-2-1 timer before the text starts flowing.",
-	clickSound:
-		"Soft procedural clicks synchronized with word flashes for rhythmic focus.",
-	fontWeight:
-		"Heavier weight makes text easier to track. Many dyslexic readers prefer medium-to-bold weights.",
-	irlenOpacity: "Adjust how strong the color tint is.",
-};
 
 const FONTS: FontFamily[] = [
 	"JetBrains Mono",
@@ -58,6 +23,7 @@ const FONTS: FontFamily[] = [
 
 @customElement("settings-panel")
 export class SettingsPanel extends LitElement {
+	private i18n = new LocaleController(this);
 	protected override createRenderRoot() {
 		return this;
 	}
@@ -80,8 +46,8 @@ export class SettingsPanel extends LitElement {
 		const effectiveTheme = theme === "system" ? getResolvedTheme(theme) : theme;
 		const themeOptions: ("light" | "dark")[] = ["light", "dark"];
 		const themeLabels: Record<"light" | "dark", string> = {
-			light: "☀️ Light",
-			dark: "🌙 Dark",
+			light: `☀️ ${this.i18n.t("settings.light")}`,
+			dark: `🌙 ${this.i18n.t("settings.dark")}`,
 		};
 
 		return html`
@@ -89,9 +55,9 @@ export class SettingsPanel extends LitElement {
 
         <!-- Theme -->
         <section class="pb-6">
-          <span class="text-xs uppercase tracking-widest text-ui-muted block mb-2">Theme</span>
+          <span class="text-xs uppercase tracking-widest text-ui-muted block mb-2">${this.i18n.t("settings.theme")}</span>
           <speeedy-segmented
-            group-label="Theme"
+            group-label=${this.i18n.t("settings.theme")}
             .options=${themeOptions.map((t) => ({ value: t, label: themeLabels[t] }))}
             .value=${effectiveTheme}
             @change=${(e: CustomEvent) => {
@@ -104,7 +70,7 @@ export class SettingsPanel extends LitElement {
         <!-- Speed -->
         <section class="pb-6">
           <speeedy-range
-            label="Speed"
+            label=${this.i18n.t("settings.speed")}
             min="50" max="1600" step="25"
             .value=${s.wpm}
             unit=" WPM"
@@ -117,7 +83,7 @@ export class SettingsPanel extends LitElement {
         <!-- Font Size -->
         <section class="pb-6">
           <speeedy-range
-            label="Font size"
+            label=${this.i18n.t("settings.fontSize")}
             min="16" max="256" step="4"
             .value=${s.fontSize}
             unit="px"
@@ -128,13 +94,13 @@ export class SettingsPanel extends LitElement {
         <!-- Letter Spacing -->
         <section class="pb-6">
           <speeedy-range
-            label="Letter spacing"
+            label=${this.i18n.t("settings.letterSpacing")}
             min="0" max="0.5" step="0.01"
             .value=${s.letterSpacing}
             .format=${(v: number) => `${v.toFixed(2)}em`}
             min-label="0em"
             max-label="0.5em"
-            tip=${TOOLTIPS.letterSpacing}
+            tip=${this.i18n.t("settings.letterSpacingTip")}
             @change=${(e: CustomEvent) => this.emit({ letterSpacing: e.detail.value })}
           ></speeedy-range>
         </section>
@@ -142,25 +108,25 @@ export class SettingsPanel extends LitElement {
         <!-- Pivot Position -->
         <section class="pb-6">
           <speeedy-range
-            label="Pivot offset"
+            label=${this.i18n.t("settings.pivotOffset")}
             min="-30" max="30" step="1"
             .value=${s.pivotOffset ?? 0}
-            .format=${(v: number) => (v === 0 ? "Centre" : v > 0 ? `+${v}%` : `${v}%`)}
+            .format=${(v: number) => (v === 0 ? this.i18n.t("settings.centre") : v > 0 ? `+${v}%` : `${v}%`)}
             min-label="-30%"
             max-label="+30%"
-            tip=${TOOLTIPS.pivotOffset}
+            tip=${this.i18n.t("settings.pivotOffsetTip")}
             @change=${(e: CustomEvent) => this.emit({ pivotOffset: e.detail.value })}
           ></speeedy-range>
         </section>
 
         <!-- Words per flash -->
         <section class="pb-6">
-          <span class="text-xs uppercase tracking-widest text-ui-muted block mb-2">Words per flash</span>
+          <span class="text-xs uppercase tracking-widest text-ui-muted block mb-2">${this.i18n.t("settings.wordsPerFlash")}</span>
           <speeedy-segmented
-            group-label="Words per flash"
-            .options=${[1, 2, 3, 4, 5].map((n) => ({ value: n, label: n === 1 ? "1 word" : `${n} words` }))}
+            group-label=${this.i18n.t("settings.wordsPerFlash")}
+            .options=${[1, 2, 3, 4, 5].map((n) => ({ value: n, label: this.i18n.t(n === 1 ? "settings.oneWord" : "settings.words", { count: n }) }))}
             .value=${s.chunkSize}
-            tip="Number of words displayed in each flash. More words = faster reading but may reduce comprehension."
+            tip=${this.i18n.t("settings.wordsPerFlashTip")}
             @change=${(e: CustomEvent) => this.emit({ chunkSize: e.detail.value })}
           ></speeedy-segmented>
         </section>
@@ -168,43 +134,43 @@ export class SettingsPanel extends LitElement {
         <!-- Advanced timing -->
         <section class="border-t border-base-200 pt-6 pb-2" aria-labelledby="settings-advanced-heading">
           <h2 id="settings-advanced-heading" class="text-xs uppercase tracking-widest text-ui-muted font-medium mb-4">
-            Advanced timing
+            ${this.i18n.t("settings.advancedTiming")}
           </h2>
           <div class="flex flex-col gap-5">
             <speeedy-range
-              label="Sentence pause"
+              label=${this.i18n.t("settings.sentencePause")}
               min="1" max="10" step="0.5"
               .value=${s.sentencePauseMultiplier}
               unit="×"
               min-label="1×"
               max-label="10×"
-              tip=${TOOLTIPS.sentencePause}
+              tip=${this.i18n.t("settings.sentencePauseTip")}
               @change=${(e: CustomEvent) => this.emit({ sentencePauseMultiplier: e.detail.value })}
             ></speeedy-range>
             <speeedy-range
-              label="Paragraph pause"
-              hint="Extra dwell at paragraph start"
+              label=${this.i18n.t("settings.paragraphPause")}
+              hint=${this.i18n.t("settings.paragraphPauseHint")}
               min="1" max="3" step="0.1"
               .value=${s.paragraphPauseMultiplier ?? 1}
               .format=${(v: number) => `${v.toFixed(1)}×`}
               min-label="1×"
               max-label="3×"
-              tip=${TOOLTIPS.paragraphPause}
+              tip=${this.i18n.t("settings.paragraphPauseTip")}
               @change=${(e: CustomEvent) => this.emit({ paragraphPauseMultiplier: e.detail.value })}
             ></speeedy-range>
             <div class="flex flex-col gap-3">
               <speeedy-toggle
-                label="Speed ramp"
-                hint="Accelerate gradually to target"
+                label=${this.i18n.t("settings.speedRamp")}
+                hint=${this.i18n.t("settings.speedRampHint")}
                 ?checked=${s.speedRampEnabled}
-                tip=${TOOLTIPS.speedRamp}
+                tip=${this.i18n.t("settings.speedRampTip")}
                 @change=${(e: CustomEvent) => this.emit({ speedRampEnabled: e.detail.value })}
               ></speeedy-toggle>
               ${
 								s.speedRampEnabled
 									? html`
                 <speeedy-range
-                  label="Target WPM"
+                  label=${this.i18n.t("settings.targetWpm")}
                   min="50" max="1600" step="25"
                   .value=${s.speedRampTarget}
                   unit=" WPM"
@@ -223,13 +189,13 @@ export class SettingsPanel extends LitElement {
         <!-- Accessibility & visuals -->
         <section class="border-t border-base-200 pt-6 pb-2" aria-labelledby="settings-a11y-heading">
           <h2 id="settings-a11y-heading" class="text-xs uppercase tracking-widest text-ui-muted font-medium mb-4">
-            Accessibility & visuals
+            ${this.i18n.t("settings.accessibilityVisuals")}
           </h2>
           <div class="flex flex-col gap-6">
             <div>
               <div class="flex items-center justify-between gap-2 mb-2">
-                <span class="text-xs uppercase tracking-widest text-ui-muted">Reading font</span>
-                ${s.dyslexiaMode ? html`<span class="text-[10px] bg-warning text-warning-content px-1.5 py-0.5 rounded font-medium uppercase shrink-0">Dyslexic active</span>` : ""}
+                <span class="text-xs uppercase tracking-widest text-ui-muted">${this.i18n.t("settings.readingFont")}</span>
+                ${s.dyslexiaMode ? html`<span class="text-[10px] bg-warning text-warning-content px-1.5 py-0.5 rounded font-medium uppercase shrink-0">${this.i18n.t("settings.dyslexicActive")}</span>` : ""}
               </div>
               <div class="rounded-xl border border-base-200 bg-base-200/20 p-1.5 flex flex-col gap-0.5 ${s.dyslexiaMode ? "opacity-40 pointer-events-none grayscale" : ""}">
                 ${FONTS.map(
@@ -247,52 +213,52 @@ export class SettingsPanel extends LitElement {
               </div>
             </div>
             <speeedy-range
-              label="Font weight"
+              label=${this.i18n.t("settings.fontWeight")}
               min="300" max="800" step="100"
               .value=${s.fontWeight ?? 400}
               .format=${(v: number) => {
 								const labels: Record<number, string> = {
-									300: "Light",
-									400: "Regular",
-									500: "Medium",
-									600: "Semi-bold",
-									700: "Bold",
-									800: "Extra-bold",
+									300: this.i18n.t("settings.weightLight"),
+									400: this.i18n.t("settings.weightRegular"),
+									500: this.i18n.t("settings.weightMedium"),
+									600: this.i18n.t("settings.weightSemiBold"),
+									700: this.i18n.t("settings.weightBold"),
+									800: this.i18n.t("settings.weightExtraBold"),
 								};
 								return labels[v] ?? String(v);
 							}}
-              min-label="Light"
-              max-label="Extra-bold"
-              tip=${TOOLTIPS.fontWeight}
+              min-label=${this.i18n.t("settings.weightLight")}
+              max-label=${this.i18n.t("settings.weightExtraBold")}
+              tip=${this.i18n.t("settings.fontWeightTip")}
               @change=${(e: CustomEvent) => this.emit({ fontWeight: e.detail.value as FontWeight })}
             ></speeedy-range>
             <div class="flex flex-col gap-3">
-              <span class="text-xs uppercase tracking-widest text-ui-muted">Visual highlights</span>
+              <span class="text-xs uppercase tracking-widest text-ui-muted">${this.i18n.t("settings.visualHighlights")}</span>
               <div class="rounded-xl border border-base-200/80 bg-base-100/40 p-3 flex flex-col gap-3">
                 <div class="flex items-center justify-between gap-3">
-                  <span class="text-sm text-base-content">Pivot (ORP)</span>
+                  <span class="text-sm text-base-content">${this.i18n.t("settings.pivotOrp")}</span>
                   <input
                     type="color" .value=${s.highlightColor}
-                    aria-label="ORP pivot highlight color"
+                    aria-label=${this.i18n.t("settings.orpHighlightColor")}
                     @input=${(e: InputEvent) => this.emit({ highlightColor: (e.target as HTMLInputElement).value })}
                     class="w-9 h-9 rounded-lg shrink-0 cursor-pointer border border-base-300 bg-transparent"
                   />
                 </div>
                 <div class="flex flex-col gap-2">
                   <speeedy-toggle
-                    label="Colorize dialogue"
+                    label=${this.i18n.t("settings.colorizeDialogue")}
                     ?checked=${s.colorizeQuotes ?? false}
-                    tip=${TOOLTIPS.colorizeQuotes}
+                    tip=${this.i18n.t("settings.colorizeDialogueTip")}
                     @change=${(e: CustomEvent) => this.emit({ colorizeQuotes: e.detail.value })}
                   ></speeedy-toggle>
                   ${
 										s.colorizeQuotes
 											? html`
                     <div class="flex items-center justify-between gap-3 pl-0.5">
-                      <span class="text-xs text-ui-muted-subtle">Quote color</span>
+                      <span class="text-xs text-ui-muted-subtle">${this.i18n.t("settings.quoteColor")}</span>
                       <input
                         type="color" .value=${s.quoteHighlightColor}
-                        aria-label="Dialogue quote highlight color"
+                        aria-label=${this.i18n.t("settings.dialogueHighlightColor")}
                         @input=${(e: InputEvent) => this.emit({ quoteHighlightColor: (e.target as HTMLInputElement).value })}
                         class="w-9 h-9 rounded-lg shrink-0 cursor-pointer border border-base-300 bg-transparent"
                       />
@@ -303,19 +269,19 @@ export class SettingsPanel extends LitElement {
                 </div>
                 <div class="flex flex-col gap-2">
                   <speeedy-toggle
-                    label="Colorize asides ( ) [ ]"
+                    label=${this.i18n.t("settings.colorizeAsides")}
                     ?checked=${s.colorizeParens ?? false}
-                    tip=${TOOLTIPS.colorizeParens}
+                    tip=${this.i18n.t("settings.colorizeAsidesTip")}
                     @change=${(e: CustomEvent) => this.emit({ colorizeParens: e.detail.value })}
                   ></speeedy-toggle>
                   ${
 										s.colorizeParens
 											? html`
                     <div class="flex items-center justify-between gap-3 pl-0.5">
-                      <span class="text-xs text-ui-muted-subtle">Aside color</span>
+                      <span class="text-xs text-ui-muted-subtle">${this.i18n.t("settings.asideColor")}</span>
                       <input
                         type="color" .value=${s.parenHighlightColor}
-                        aria-label="Parentheses and brackets highlight color"
+                        aria-label=${this.i18n.t("settings.asideHighlightColor")}
                         @input=${(e: InputEvent) => this.emit({ parenHighlightColor: (e.target as HTMLInputElement).value })}
                         class="w-9 h-9 rounded-lg shrink-0 cursor-pointer border border-base-300 bg-transparent"
                       />
@@ -328,16 +294,16 @@ export class SettingsPanel extends LitElement {
             </div>
             <div class="flex flex-col gap-4">
               <speeedy-toggle
-                label="Dyslexia-friendly font"
+                label=${this.i18n.t("settings.dyslexiaFriendlyFont")}
                 ?checked=${s.dyslexiaMode}
-                tip=${TOOLTIPS.dyslexiaMode}
+                tip=${this.i18n.t("settings.dyslexiaFriendlyFontTip")}
                 @change=${(e: CustomEvent) => {
 									trackEvent("dyslexia-toggled", { enabled: e.detail.value });
 									this.emit({ dyslexiaMode: e.detail.value });
 								}}
               ></speeedy-toggle>
               <div>
-                <span class="text-sm text-base-content block mb-2">Irlen overlay tint</span>
+                <span class="text-sm text-base-content block mb-2">${this.i18n.t("settings.irlenOverlayTint")}</span>
                 <speeedy-segmented
                   .options=${(
 										["none", "peach", "mint", "parchment"] as const
@@ -351,8 +317,8 @@ export class SettingsPanel extends LitElement {
 											value: mode,
 											label:
 												mode === "none"
-													? "Off"
-													: mode.charAt(0).toUpperCase() + mode.slice(1),
+											? this.i18n.t("common.off")
+											: this.i18n.t(`settings.irlen${mode.charAt(0).toUpperCase()}${mode.slice(1)}` as "settings.irlenPeach" | "settings.irlenMint" | "settings.irlenParchment"),
 											style: mode === "none" ? "" : colors[mode],
 										};
 									})}
@@ -364,13 +330,13 @@ export class SettingsPanel extends LitElement {
 										? html`
                   <div class="mt-3">
                     <speeedy-range
-                      label="Overlay intensity"
+                      label=${this.i18n.t("settings.overlayIntensity")}
                       min="0.05" max="0.5" step="0.01"
                       .value=${s.irlenOpacity ?? 0.18}
                       .format=${(v: number) => `${Math.round(v * 100)}%`}
                       min-label="5%"
                       max-label="50%"
-                      tip=${TOOLTIPS.irlenOpacity}
+                      tip=${this.i18n.t("settings.overlayIntensityTip")}
                       @change=${(e: CustomEvent) => this.emit({ irlenOpacity: e.detail.value })}
                     ></speeedy-range>
                   </div>
@@ -380,19 +346,19 @@ export class SettingsPanel extends LitElement {
               </div>
             </div>
             <div class="flex flex-col gap-4 pt-2 border-t border-base-200/60">
-              <span class="text-xs uppercase tracking-widest text-ui-muted">Pause &amp; anchor</span>
+              <span class="text-xs uppercase tracking-widest text-ui-muted">${this.i18n.t("settings.pauseAnchor")}</span>
               <div>
-                <span class="text-sm text-base-content block mb-2">Pause view mode</span>
+                <span class="text-sm text-base-content block mb-2">${this.i18n.t("settings.pauseViewMode")}</span>
                 <speeedy-segmented
-                  .options=${(["focus", "context", "fulltext"] as const).map((v) => ({ value: v, label: v.charAt(0).toUpperCase() + v.slice(1) }))}
+                  .options=${(["focus", "context", "fulltext"] as const).map((v) => ({ value: v, label: this.i18n.t(v === "focus" ? "settings.pauseFocus" : v === "context" ? "settings.pauseContext" : "settings.pauseFulltext") }))}
                   .value=${s.pauseView ?? "focus"}
                   @change=${(e: CustomEvent) => this.emit({ pauseView: e.detail.value })}
                 ></speeedy-segmented>
               </div>
               <div>
-                <span class="text-sm text-base-content block mb-2">Bionic anchor position</span>
+                <span class="text-sm text-base-content block mb-2">${this.i18n.t("settings.bionicAnchorPosition")}</span>
                 <speeedy-segmented
-                  .options=${(["early", "balanced", "late"] as const).map((pos) => ({ value: pos, label: pos.charAt(0).toUpperCase() + pos.slice(1) }))}
+                  .options=${(["early", "balanced", "late"] as const).map((pos) => ({ value: pos, label: this.i18n.t(pos === "early" ? "settings.anchorEarly" : pos === "balanced" ? "settings.anchorBalanced" : "settings.anchorLate") }))}
                   .value=${s.bionicFocusPosition ?? "balanced"}
                   @change=${(e: CustomEvent) => this.emit({ bionicFocusPosition: e.detail.value })}
                 ></speeedy-segmented>
@@ -403,52 +369,52 @@ export class SettingsPanel extends LitElement {
 
         <!-- Reading features -->
         <section class="border-t border-base-200 pt-6 pb-2">
-          <h2 class="text-xs uppercase tracking-widest text-ui-muted font-medium mb-4">Reading features</h2>
+          <h2 class="text-xs uppercase tracking-widest text-ui-muted font-medium mb-4">${this.i18n.t("settings.readingFeatures")}</h2>
           <div class="flex flex-col gap-3">
             <speeedy-toggle
-              label="Show progress bar"
+              label=${this.i18n.t("settings.showProgressBar")}
               ?checked=${s.showProgress}
               @change=${(e: CustomEvent) => this.emit({ showProgress: e.detail.value })}
             ></speeedy-toggle>
             <speeedy-toggle
-              label="Focus mode (immersion)"
+              label=${this.i18n.t("settings.focusMode")}
               ?checked=${s.focusModeEnabled ?? false}
-              tip="While playing, hide the header, progress bar, bottom controls, and settings so only words show. Tap the reading area or Space to pause and bring controls back. Toggle anytime with F."
+              tip=${this.i18n.t("settings.focusModeTip")}
               @change=${(e: CustomEvent) => this.emit({ focusModeEnabled: e.detail.value })}
             ></speeedy-toggle>
             <speeedy-toggle
-              label="ORP guide marks"
+              label=${this.i18n.t("settings.orpGuideMarks")}
               ?checked=${s.showOrpGuides}
-              tip=${TOOLTIPS.orpGuides}
+              tip=${this.i18n.t("settings.orpGuideMarksTip")}
               @change=${(e: CustomEvent) => this.emit({ showOrpGuides: e.detail.value })}
             ></speeedy-toggle>
             <speeedy-toggle
-              label="Hide trailing punctuation"
+              label=${this.i18n.t("settings.hideTrailingPunctuation")}
               ?checked=${s.hidePunctuationInDisplay ?? false}
               @change=${(e: CustomEvent) => this.emit({ hidePunctuationInDisplay: e.detail.value })}
             ></speeedy-toggle>
             <speeedy-toggle
-              label="Remove citations"
+              label=${this.i18n.t("settings.removeCitations")}
               ?checked=${s.removeCitations ?? false}
-              tip="Strip inline citations like [1], [1-3], and (Smith et al., 2020) for distraction-free academic reading."
+              tip=${this.i18n.t("settings.removeCitationsTip")}
               @change=${(e: CustomEvent) => this.emit({ removeCitations: e.detail.value })}
             ></speeedy-toggle>
             <speeedy-toggle
-              label="Ticker mode"
+              label=${this.i18n.t("settings.tickerMode")}
               ?checked=${s.tickerMode ?? false}
-              tip="Instead of flashing one word at a time, text scrolls horizontally at your configured WPM. Speed, pause, and seek all work as normal."
+              tip=${this.i18n.t("settings.tickerModeTip")}
               @change=${(e: CustomEvent) => this.emit({ tickerMode: e.detail.value })}
             ></speeedy-toggle>
             <speeedy-toggle
-              label="Smart speed logic"
+              label=${this.i18n.t("settings.smartSpeedLogic")}
               ?checked=${s.smartSpeed}
-              tip=${TOOLTIPS.smartSpeed}
+              tip=${this.i18n.t("settings.smartSpeedTip")}
               @change=${(e: CustomEvent) => this.emit({ smartSpeed: e.detail.value })}
             ></speeedy-toggle>
             <speeedy-toggle
-              label="Bionic reading fixations"
+              label=${this.i18n.t("settings.bionicReadingFixations")}
               ?checked=${s.bionicMode}
-              tip=${TOOLTIPS.bionicMode}
+              tip=${this.i18n.t("settings.bionicReadingTip")}
               @change=${(e: CustomEvent) => {
 								trackEvent("bionic-toggled", { enabled: e.detail.value });
 								this.emit({ bionicMode: e.detail.value });
@@ -457,9 +423,9 @@ export class SettingsPanel extends LitElement {
 
             <div class="flex flex-col gap-2">
               <speeedy-toggle
-                label="Peripheral context"
+                label=${this.i18n.t("settings.peripheralContext")}
                 ?checked=${s.peripheralContext}
-                tip=${TOOLTIPS.peripheralContext}
+                tip=${this.i18n.t("settings.peripheralContextTip")}
                 @change=${(e: CustomEvent) => this.emit({ peripheralContext: e.detail.value })}
               ></speeedy-toggle>
               ${
@@ -467,7 +433,7 @@ export class SettingsPanel extends LitElement {
 									? html`
                 <div class="pl-1 mt-1">
                   <speeedy-range
-                    label="Density (words each side)"
+                    label=${this.i18n.t("settings.contextDensity")}
                     min="1" max="3" step="1"
                     .value=${s.peripheralContextCount ?? 1}
                     min-label="1"
@@ -484,14 +450,14 @@ export class SettingsPanel extends LitElement {
 
         <!-- Audio -->
         <section class="border-t border-base-200 pt-6 pb-2">
-          <h2 class="text-xs uppercase tracking-widest text-ui-muted font-medium mb-4">Audio &amp; focus</h2>
+          <h2 class="text-xs uppercase tracking-widest text-ui-muted font-medium mb-4">${this.i18n.t("settings.audioFocus")}</h2>
           <div class="flex flex-col gap-5">
             <!-- Clicks -->
             <div class="flex flex-col gap-3">
               <speeedy-toggle
-                label="Tactile word clicks"
+                label=${this.i18n.t("settings.tactileWordClicks")}
                 ?checked=${s.clickSoundEnabled ?? false}
-                tip=${TOOLTIPS.clickSound}
+                tip=${this.i18n.t("settings.tactileWordClicksTip")}
                 @change=${(e: CustomEvent) => this.emit({ clickSoundEnabled: e.detail.value })}
               ></speeedy-toggle>
               ${
@@ -499,7 +465,7 @@ export class SettingsPanel extends LitElement {
 									? html`
                 <div class="pl-1">
                   <speeedy-range
-                    label="Click pitch factor"
+                    label=${this.i18n.t("settings.clickPitchFactor")}
                     min="0.1" max="3.0" step="0.1"
                     .value=${s.clickSoundPitch ?? 1.0}
                     .format=${(v: number) => `${v.toFixed(1)}x`}
@@ -515,7 +481,7 @@ export class SettingsPanel extends LitElement {
             <!-- Ambient -->
             <div class="flex flex-col gap-3">
               <div>
-                <span class="text-sm text-base-content block mb-2">Ambient focus noise</span>
+                <span class="text-sm text-base-content block mb-2">${this.i18n.t("settings.ambientFocusNoise")}</span>
                 <speeedy-segmented
                   .options=${(["none", "white", "pink", "brown"] as const).map(
 										(n) => {
@@ -528,8 +494,8 @@ export class SettingsPanel extends LitElement {
 												value: n,
 												label:
 													n === "none"
-														? "Off"
-														: n.charAt(0).toUpperCase() + n.slice(1),
+												? this.i18n.t("common.off")
+												: this.i18n.t(n === "white" ? "settings.noiseWhite" : n === "pink" ? "settings.noisePink" : "settings.noiseBrown"),
 												style: n === "none" ? "" : colors[n],
 											};
 										},
@@ -550,7 +516,7 @@ export class SettingsPanel extends LitElement {
 									? html`
                 <div class="pl-1">
                   <speeedy-range
-                    label="Noise volume"
+                    label=${this.i18n.t("settings.noiseVolume")}
                     min="0" max="1" step="0.05"
                     .value=${s.ambientVolume ?? 0.5}
                     .format=${(v: number) => `${Math.round(v * 100)}%`}
@@ -568,30 +534,30 @@ export class SettingsPanel extends LitElement {
 
         <!-- Engine logic -->
         <section class="border-t border-base-200 pt-6 pb-4">
-          <h2 class="text-xs uppercase tracking-widest text-ui-muted font-medium mb-4">Engine logic</h2>
+          <h2 class="text-xs uppercase tracking-widest text-ui-muted font-medium mb-4">${this.i18n.t("settings.engineLogic")}</h2>
           <div class="flex flex-col gap-4">
             <speeedy-toggle
-              label="Start countdown (3s)"
+              label=${this.i18n.t("settings.startCountdown")}
               ?checked=${s.countdownEnabled ?? false}
-              tip=${TOOLTIPS.countdown}
+              tip=${this.i18n.t("settings.startCountdownTip")}
               @change=${(e: CustomEvent) => this.emit({ countdownEnabled: e.detail.value })}
             ></speeedy-toggle>
             <speeedy-toggle
-              label="Comma pause beacon"
+              label=${this.i18n.t("settings.commaPauseBeacon")}
               ?checked=${s.commaAsPause ?? false}
-              tip=${TOOLTIPS.commaAsPause}
+              tip=${this.i18n.t("settings.commaPauseTip")}
               @change=${(e: CustomEvent) => this.emit({ commaAsPause: e.detail.value })}
             ></speeedy-toggle>
             <speeedy-toggle
-              label="Aside closing pause"
+              label=${this.i18n.t("settings.asideClosingPause")}
               ?checked=${s.contextPauseOnClose ?? true}
-              tip=${TOOLTIPS.contextPauseOnClose}
+              tip=${this.i18n.t("settings.asideClosingPauseTip")}
               @change=${(e: CustomEvent) => this.emit({ contextPauseOnClose: e.detail.value })}
             ></speeedy-toggle>
             <div>
               <div class="flex items-center justify-between mb-2">
-                <span class="text-sm text-base-content">Rewind skip amount</span>
-                <span class="font-mono text-sm font-medium">${s.rewindStep ?? 5}w</span>
+                <span class="text-sm text-base-content">${this.i18n.t("settings.rewindSkipAmount")}</span>
+                <span class="font-mono text-sm font-medium">${this.i18n.t("settings.wordCountShort", { count: s.rewindStep ?? 5 })}</span>
               </div>
               <div class="flex items-center gap-1.5">
                 ${([1, 3, 5] as const).map(
@@ -613,7 +579,7 @@ export class SettingsPanel extends LitElement {
 										}}
                     class="input input-xs input-bordered w-full pr-4 text-center font-mono"
                   />
-                  <span class="absolute right-1 top-1/2 -translate-y-1/2 text-[10px] opacity-30 pointer-events-none">w</span>
+                  <span class="absolute right-1 top-1/2 -translate-y-1/2 text-[10px] opacity-30 pointer-events-none">${this.i18n.t("settings.wordSuffix")}</span>
                 </div>
               </div>
             </div>
