@@ -471,6 +471,14 @@ Um adulto lê, em média, cerca de duzentas e trinta e oito palavras por minuto.
 			"Você pode alterar essas configurações depois no painel de configurações.",
 		finish: "Finalizar",
 	},
+	share: {
+		invalidLink: "Link de compartilhamento inválido ou expirado.",
+		goToSpeeedy: "Ir para o Speeedy",
+		readingStats: "Estatísticas de leitura",
+		profileTitle: "Perfil de {name}",
+		trackOwnReading: "Quer acompanhar sua própria leitura?",
+		tryForFree: "Experimente o Speeedy grátis →",
+	},
 	feedback: {
 		title: "Enviar feedback",
 		thankYou: "Agradecemos!",

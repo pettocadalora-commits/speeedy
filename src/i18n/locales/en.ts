@@ -483,6 +483,14 @@ The average adult reads at around two hundred and thirty-eight words per minute.
 			"You can always change these settings later in the settings panel.",
 		finish: "Finish",
 	},
+	share: {
+		invalidLink: "Invalid or expired share link.",
+		goToSpeeedy: "Go to Speeedy",
+		readingStats: "Reading Stats",
+		profileTitle: "{name}'s Profile",
+		trackOwnReading: "Want to track your own reading?",
+		tryForFree: "Try Speeedy for free →",
+	},
 	feedback: {
 		title: "Send Feedback",
 		thankYou: "Thank you!",
