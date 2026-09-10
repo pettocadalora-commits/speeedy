@@ -471,6 +471,25 @@ Um adulto lê, em média, cerca de duzentas e trinta e oito palavras por minuto.
 			"Você pode alterar essas configurações depois no painel de configurações.",
 		finish: "Finalizar",
 	},
+	feedback: {
+		title: "Enviar feedback",
+		thankYou: "Agradecemos!",
+		messageReceived: "Sua mensagem foi recebida.",
+		close: "Fechar",
+		bug: "Bug",
+		feature: "Recurso",
+		other: "Outro",
+		bugPlaceholder: "O que aconteceu? Como posso reproduzir o problema?",
+		featurePlaceholder:
+			"O que você gostaria que fosse adicionado ou melhorado?",
+		otherPlaceholder: "Compartilhe suas ideias...",
+		emailPlaceholder: "Seu e-mail (opcional – para retorno)",
+		sendError: "Não foi possível enviar. Tente novamente.",
+		sending: "Enviando...",
+		send: "Enviar feedback",
+		preferGitHub: "Prefere o GitHub?",
+		openIssue: "Abrir uma issue",
+	},
 	errors: {
 		genericTitle: "Algo deu errado",
 		offline:

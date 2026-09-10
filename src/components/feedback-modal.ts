@@ -2,6 +2,7 @@ import { html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { Bug, MessageCircle, Rocket, X } from "lucide";
 import { GITHUB_URL } from "../config.js";
+import { LocaleController } from "../i18n/controller.js";
 import { icon } from "../utils/icons.js";
 import "./ui/dialog.js";
 import "./ui/input.js";
@@ -13,6 +14,8 @@ type SubmitStatus = "idle" | "sending" | "success" | "error";
 
 @customElement("feedback-modal")
 export class FeedbackModal extends LitElement {
+	private i18n = new LocaleController(this);
+
 	protected override createRenderRoot() {
 		return this;
 	}
@@ -84,7 +87,7 @@ export class FeedbackModal extends LitElement {
           <div class="card-body p-6">
 
             <div class="flex justify-between items-center mb-4">
-              <h3 class="font-semibold text-lg">Send Feedback</h3>
+              <h3 class="font-semibold text-lg">${this.i18n.t("feedback.title")}</h3>
               <button class="btn btn-ghost btn-circle btn-sm" @click=${this.hide}>${icon(X, "w-4 h-4")}</button>
             </div>
 
@@ -93,9 +96,9 @@ export class FeedbackModal extends LitElement {
 								? html`
                 <div class="text-center py-8">
                   <div class="text-5xl mb-4">${icon(Rocket, "w-12 h-12 text-primary")}</div>
-                  <p class="font-medium text-lg">Thank you!</p>
-                  <p class="text-ui-muted mt-1">Your message has been received.</p>
-                  <button class="btn btn-ghost mt-6" @click=${this.hide}>Close</button>
+                  <p class="font-medium text-lg">${this.i18n.t("feedback.thankYou")}</p>
+                  <p class="text-ui-muted mt-1">${this.i18n.t("feedback.messageReceived")}</p>
+                  <button class="btn btn-ghost mt-6" @click=${this.hide}>${this.i18n.t("feedback.close")}</button>
                 </div>
               `
 								: html`
@@ -109,7 +112,7 @@ export class FeedbackModal extends LitElement {
                         type="button"
                         class="btn flex-1 btn-sm ${this.feedbackType === t ? "btn-primary" : "btn-ghost border"}"
                         @click=${() => (this.feedbackType = t)}>
-                        ${t === "bug" ? html`${icon(Bug, "w-4 h-4")} Bug` : t === "feature" ? html`${icon(Rocket, "w-4 h-4")} Feature` : html`${icon(MessageCircle, "w-4 h-4")} Other`}
+                        ${t === "bug" ? html`${icon(Bug, "w-4 h-4")} ${this.i18n.t("feedback.bug")}` : t === "feature" ? html`${icon(Rocket, "w-4 h-4")} ${this.i18n.t("feedback.feature")}` : html`${icon(MessageCircle, "w-4 h-4")} ${this.i18n.t("feedback.other")}`}
                       </button>
                     `,
 										)}
@@ -118,10 +121,10 @@ export class FeedbackModal extends LitElement {
                   <speeedy-textarea
                     placeholder=${
 											this.feedbackType === "bug"
-												? "What happened? How can I reproduce it?"
+												? this.i18n.t("feedback.bugPlaceholder")
 												: this.feedbackType === "feature"
-													? "What would you like to see added or improved?"
-													: "Share your thoughts..."
+													? this.i18n.t("feedback.featurePlaceholder")
+													: this.i18n.t("feedback.otherPlaceholder")
 										}
                     .value=${this.message}
                     min-height="140px"
@@ -130,7 +133,7 @@ export class FeedbackModal extends LitElement {
 
                   <speeedy-input
                     type="email"
-                    placeholder="Your email (optional – for follow-up)"
+                    placeholder=${this.i18n.t("feedback.emailPlaceholder")}
                     .value=${this.email}
                     @change=${(e: CustomEvent<{ value: string }>) => (this.email = e.detail.value)}
                   ></speeedy-input>
@@ -138,7 +141,7 @@ export class FeedbackModal extends LitElement {
                   ${
 										this.status === "error"
 											? html`
-                    <p class="text-error text-sm">Failed to send. Please try again.</p>
+                    <p class="text-error text-sm">${this.i18n.t("feedback.sendError")}</p>
                   `
 											: ""
 									}
@@ -149,15 +152,15 @@ export class FeedbackModal extends LitElement {
                     ?disabled=${!this.message.trim() || this.status === "sending"}>
                     ${
 											this.status === "sending"
-												? html`<span class="loading loading-spinner"></span> Sending...`
-												: "Send Feedback"
+												? html`<span class="loading loading-spinner"></span> ${this.i18n.t("feedback.sending")}`
+												: this.i18n.t("feedback.send")
 										}
                   </button>
 
                   <p class="text-xs text-ui-muted-subtle text-center">
-                    Prefer GitHub?
+                    ${this.i18n.t("feedback.preferGitHub")}
                     <a href=${githubIssueUrl} target="_blank" rel="noopener" class="underline underline-offset-2 hover:text-base-content transition-colors">
-                      Open an issue
+                      ${this.i18n.t("feedback.openIssue")}
                     </a>
                   </p>
                 </form>
