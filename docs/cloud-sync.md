@@ -106,6 +106,23 @@ Conteúdo cifrado (snapshot JSON, nunca visível ao servidor):
 4. **UI** — seção de sync no perfil: gerar código, entrar com código, enviar,
    receber, status/última sincronização, "apagar da nuvem".
 
+## Pitfall de deploy (descoberto 2026-09-10)
+
+**`wrangler pages deploy` NÃO aplica bindings do `wrangler.toml`.** A primeira
+versão publicada subiu sem KV e o endpoint respondeu `503 sync_unavailable` em
+produção (o guard do handler pegou o problema). O binding precisa ser gravado na
+**configuração do projeto Pages**:
+
+```bash
+PATCH /accounts/<acc>/pages/projects/speeedy
+{ "deployment_configs": { "production": { "kv_namespaces":
+  { "SPEEDY_SYNC": { "namespace_id": "<id>" } } }, "preview": { ... } } }
+```
+
+E o binding só passa a valer em **novo deploy** (bindings são resolvidos no
+momento do deploy). O `wrangler.toml` continua necessário para `wrangler pages
+dev` (KV local) — ou seja, **as duas fontes precisam concordar**.
+
 ## Riscos assumidos
 
 - **Código perdido = dados irrecuperáveis.** Mitigação: aviso na UI + backup
