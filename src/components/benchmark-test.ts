@@ -3,6 +3,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { Heart } from "lucide";
 import type { BenchmarkPassage } from "../data/benchmark-passages.js";
 import { pickPassage } from "../data/benchmark-passages.js";
+import { LocaleController } from "../i18n/controller.js";
 import type { UserProfile } from "../models/types.js";
 import { saveProfile } from "../services/storage-service.js";
 import {
@@ -18,6 +19,8 @@ type Phase = "intro" | "reading" | "quiz" | "results";
 
 @customElement("benchmark-test")
 export class BenchmarkTest extends LitElement {
+	private i18n = new LocaleController(this);
+
 	protected override createRenderRoot() {
 		return this;
 	}
@@ -105,30 +108,29 @@ export class BenchmarkTest extends LitElement {
 	private renderIntro() {
 		return html`
       <div class="min-h-screen bg-base-100 flex flex-col">
-        <speeedy-page-nav label="Reading Baseline Test" back-href="#/"></speeedy-page-nav>
+        <speeedy-page-nav label=${this.i18n.t("bench.pageTitle")} back-href="#/"></speeedy-page-nav>
 
         <main class="flex-1 flex flex-col items-center justify-center px-6 text-center">
           <div class="max-w-md w-full flex flex-col gap-8">
             <div>
-              <h1 class="text-3xl font-light text-base-content mb-3">Find your reading speed</h1>
+              <h1 class="text-3xl font-light text-base-content mb-3">${this.i18n.t("bench.heading")}</h1>
               <p class="text-ui-muted text-sm font-light leading-relaxed">
-                You'll read a short passage at your own pace.
-                Press <strong class="font-medium text-base-content">Start</strong> when you're ready to begin,
-                and <strong class="font-medium text-base-content">Done</strong> when you finish.
-                Then answer 10 questions about what you read.
+                ${this.i18n.t("bench.introPrefix")}
+                <strong class="font-medium text-base-content">${this.i18n.t("bench.start")}</strong>${this.i18n.t("bench.introMiddle")}
+                <strong class="font-medium text-base-content">${this.i18n.t("bench.done")}</strong>${this.i18n.t("bench.introSuffix")}
               </p>
             </div>
 
             <div class="grid grid-cols-3 gap-3">
-              ${this.chip(`${this.passage.wordCount} words`, "passage length")}
-              ${this.chip("Your pace", "no time pressure")}
-              ${this.chip("10 Qs", "comprehension quiz")}
+              ${this.chip(this.i18n.t("bench.wordCount", { count: this.passage.wordCount }), this.i18n.t("bench.passageLength"))}
+              ${this.chip(this.i18n.t("bench.yourPace"), this.i18n.t("bench.noTimePressure"))}
+              ${this.chip(this.i18n.t("bench.questionCount", { count: 10 }), this.i18n.t("bench.comprehensionQuiz"))}
             </div>
 
-            <p class="text-xs text-ui-muted-subtle -mt-2">Passage: <span class="text-ui-muted">${this.passage.title}</span></p>
+            <p class="text-xs text-ui-muted-subtle -mt-2">${this.i18n.t("bench.passageLabel")} <span class="text-ui-muted">${this.passage.title}</span></p>
 
             <button class="btn btn-primary btn-lg rounded-full w-full" data-umami-event="benchmark-start" @click=${this.startReading}>
-              Start reading
+              ${this.i18n.t("bench.startReading")}
             </button>
           </div>
         </main>
@@ -151,9 +153,9 @@ export class BenchmarkTest extends LitElement {
       <div class="min-h-screen bg-base-100 flex flex-col">
         <div class="shrink-0 px-6 py-3 border-b border-base-200 flex items-center justify-between">
           <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/8 text-primary text-xs font-medium tracking-wide">
-            Reading Test
+            ${this.i18n.t("bench.readingTest")}
           </span>
-          <span class="text-xs text-ui-muted">${this.passage.wordCount} words · ${this.passage.title}</span>
+          <span class="text-xs text-ui-muted">${this.i18n.t("bench.passageMetadata", { count: this.passage.wordCount, title: this.passage.title })}</span>
         </div>
 
         <main class="flex-1 max-w-2xl mx-auto w-full px-6 py-6">
@@ -163,9 +165,9 @@ export class BenchmarkTest extends LitElement {
 							? html`
             <div class="flex flex-col items-center gap-2 mb-8">
               <button class="btn btn-primary btn-lg rounded-full px-14" @click=${this.beginTimer}>
-                Start reading
+                ${this.i18n.t("bench.startReading")}
               </button>
-              <p class="text-xs text-ui-muted">The timer begins when you press this</p>
+              <p class="text-xs text-ui-muted">${this.i18n.t("bench.timerHint")}</p>
             </div>
           `
 							: ""
@@ -180,9 +182,9 @@ export class BenchmarkTest extends LitElement {
 							? html`
             <div class="flex flex-col items-center gap-2 mt-10 pb-8">
               <button class="btn btn-primary btn-lg rounded-full px-14" @click=${this.finishReading}>
-                Done reading
+                ${this.i18n.t("bench.doneReading")}
               </button>
-              <p class="text-xs text-ui-muted">The quiz starts next — 10 short questions</p>
+              <p class="text-xs text-ui-muted">${this.i18n.t("bench.quizNextHint")}</p>
             </div>
           `
 							: ""
@@ -199,7 +201,7 @@ export class BenchmarkTest extends LitElement {
       <div class="min-h-screen bg-base-100 flex flex-col">
         <div class="shrink-0 px-6 py-3 border-b border-base-200 flex items-center justify-between">
           <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-warning/10 text-warning text-xs font-medium tracking-wide">
-            Comprehension Quiz
+            ${this.i18n.t("bench.comprehensionQuizTitle")}
           </span>
           <span class="text-xs text-ui-muted font-mono">${answered} / ${this.passage.questions.length}</span>
         </div>
@@ -214,13 +216,13 @@ export class BenchmarkTest extends LitElement {
               ?disabled=${this.answers.some((a) => a === null)}
               @click=${this.submitQuiz}
             >
-              Submit answers
+              ${this.i18n.t("bench.submitAnswers")}
             </button>
             ${
 							answered < this.passage.questions.length
 								? html`
               <p class="text-xs text-center text-ui-muted mt-3">
-                ${this.passage.questions.length - answered} question${this.passage.questions.length - answered > 1 ? "s" : ""} left
+                ${this.i18n.t(this.passage.questions.length - answered === 1 ? "bench.questionLeft" : "bench.questionsLeft", { count: this.passage.questions.length - answered })}
               </p>
             `
 								: ""
@@ -268,25 +270,25 @@ export class BenchmarkTest extends LitElement {
 		).length;
 		const wpmLabel =
 			this.resultWpm < 200
-				? "below average"
+				? this.i18n.t("bench.belowAverage")
 				: this.resultWpm < 300
-					? "average"
+					? this.i18n.t("bench.average")
 					: this.resultWpm < 450
-						? "above average"
-						: "excellent";
+						? this.i18n.t("bench.aboveAverage")
+						: this.i18n.t("bench.excellent");
 		const comprLabel =
 			this.resultComprehension < 50
-				? "needs work"
+				? this.i18n.t("bench.needsWork")
 				: this.resultComprehension < 70
-					? "fair"
+					? this.i18n.t("bench.fair")
 					: this.resultComprehension < 90
-						? "good"
-						: "excellent";
+						? this.i18n.t("bench.good")
+						: this.i18n.t("bench.excellent");
 
 		return html`
       <div class="min-h-screen bg-base-100 flex flex-col">
         <nav class="px-6 py-4 border-b border-base-200 flex items-center justify-between">
-          <span class="text-xs tracking-[0.4em] uppercase text-ui-muted">Your Results</span>
+          <span class="text-xs tracking-[0.4em] uppercase text-ui-muted">${this.i18n.t("bench.yourResults")}</span>
         </nav>
 
         <main class="flex-1 max-w-lg mx-auto w-full px-6 py-12 flex flex-col gap-10">
@@ -294,34 +296,34 @@ export class BenchmarkTest extends LitElement {
           <div class="grid grid-cols-2 gap-4">
             <div class="rounded-2xl border border-base-200 bg-base-200/30 p-6 text-center">
               <div class="text-4xl font-light text-base-content mb-1">${this.resultWpm}</div>
-              <div class="text-xs text-ui-muted-subtle mb-2">WPM</div>
+              <div class="text-xs text-ui-muted-subtle mb-2">${this.i18n.t("bench.wpm")}</div>
               <span class="inline-block px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs">${wpmLabel}</span>
             </div>
             <div class="rounded-2xl border border-base-200 bg-base-200/30 p-6 text-center">
               <div class="text-4xl font-light text-base-content mb-1">${this.resultComprehension}%</div>
-              <div class="text-xs text-ui-muted-subtle mb-2">Comprehension</div>
+              <div class="text-xs text-ui-muted-subtle mb-2">${this.i18n.t("bench.comprehension")}</div>
               <span class="inline-block px-2 py-0.5 rounded-full bg-secondary/10 text-secondary text-xs">${comprLabel}</span>
             </div>
           </div>
 
           <div class="rounded-xl border border-base-200 p-5 flex flex-col gap-3">
-            <p class="text-xs uppercase tracking-widest text-ui-muted">How you compare</p>
+            <p class="text-xs uppercase tracking-widest text-ui-muted">${this.i18n.t("bench.howYouCompare")}</p>
             <div class="flex items-center justify-between text-sm">
-              <span class="text-ui-muted font-light">Average adult</span>
-              <span class="font-mono text-base-content">238 WPM</span>
+              <span class="text-ui-muted font-light">${this.i18n.t("bench.averageAdult")}</span>
+              <span class="font-mono text-base-content">${this.i18n.t("bench.wpmValue", { value: 238 })}</span>
             </div>
             <div class="flex items-center justify-between text-sm border-t border-base-200 pt-3">
-              <span class="text-base-content font-medium">Your baseline</span>
-              <span class="font-mono text-base-content font-semibold">${this.resultWpm} WPM</span>
+              <span class="text-base-content font-medium">${this.i18n.t("bench.yourBaseline")}</span>
+              <span class="font-mono text-base-content font-semibold">${this.i18n.t("bench.wpmValue", { value: this.resultWpm })}</span>
             </div>
             <div class="flex items-center justify-between text-sm">
-              <span class="text-ui-muted font-light">RSVP-trained ceiling</span>
-              <span class="font-mono text-base-content">600+ WPM</span>
+              <span class="text-ui-muted font-light">${this.i18n.t("bench.rsvpCeiling")}</span>
+              <span class="font-mono text-base-content">${this.i18n.t("bench.wpmPlusValue", { value: 600 })}</span>
             </div>
           </div>
 
           <div class="flex flex-col gap-2">
-            <p class="text-xs uppercase tracking-widest text-ui-muted">${correct} / ${this.passage.questions.length} correct</p>
+            <p class="text-xs uppercase tracking-widest text-ui-muted">${this.i18n.t("bench.correctCount", { correct, total: this.passage.questions.length })}</p>
             <div class="flex gap-1.5 flex-wrap">
               ${this.passage.questions.map((_, qi) => {
 								const ok =
@@ -336,13 +338,13 @@ export class BenchmarkTest extends LitElement {
           </div>
 
           <p class="text-xs text-ui-muted font-light leading-relaxed">
-            Your baseline WPM has been saved to your profile and set as your starting speed in the app.
+            ${this.i18n.t("bench.baselineSaved")}
           </p>
 
           <div class="rounded-xl border border-base-200/60 bg-base-200/20 px-5 py-4 flex flex-col gap-2.5">
             <p class="text-sm font-light text-ui-muted leading-relaxed">
-              You just measured <strong class="text-base-content font-medium">${this.resultWpm} WPM</strong> with <strong class="text-base-content font-medium">${this.resultComprehension}% comprehension</strong>.
-              Speeedy is 100% free, no ads, no tracking. If it helped you today, consider supporting it.
+              ${this.i18n.t("bench.measuredPrefix")} <strong class="text-base-content font-medium">${this.i18n.t("bench.wpmValue", { value: this.resultWpm })}</strong> ${this.i18n.t("bench.measuredMiddle")} <strong class="text-base-content font-medium">${this.i18n.t("bench.comprehensionValue", { value: this.resultComprehension })}</strong>.
+              ${this.i18n.t("bench.supportMessage")}
             </p>
             <a
               href="#/donate"
@@ -350,15 +352,15 @@ export class BenchmarkTest extends LitElement {
               data-umami-event="benchmark-donate-nudge-click"
             >
               ${icon(Heart, "w-3.5 h-3.5")}
-              Support Speeedy
+              ${this.i18n.t("bench.supportSpeeedy")}
             </a>
           </div>
 
           <div class="flex flex-col gap-3 pb-8">
-            <a href="#/app" class="btn btn-primary btn-lg rounded-xl">Start reading →</a>
+            <a href="#/app" class="btn btn-primary btn-lg rounded-xl">${this.i18n.t("bench.startReadingArrow")}</a>
             <div class="flex gap-3">
-              <button class="btn btn-ghost btn-sm flex-1" @click=${() => navigate("profile")}>View profile</button>
-              <button class="btn btn-ghost btn-sm flex-1" @click=${this.reset}>Retest (new passage)</button>
+              <button class="btn btn-ghost btn-sm flex-1" @click=${() => navigate("profile")}>${this.i18n.t("bench.viewProfile")}</button>
+              <button class="btn btn-ghost btn-sm flex-1" @click=${this.reset}>${this.i18n.t("bench.retest")}</button>
             </div>
           </div>
 
