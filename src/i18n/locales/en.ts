@@ -61,6 +61,82 @@ const en = {
 		sharedReadingTitle: "Shared Reading",
 		badReadLink: "That reading link could not be opened.",
 	},
+	app: {
+		demoTitle: "Demo: The Science of Speed Reading",
+		demoText: `Every time you read a line of text, your eyes don't move smoothly, they jump. These rapid jumps are called saccades, and they happen three to four times per second. During each jump, you read nothing at all. That dead time adds up to roughly ten percent of every reading session, wasted on pure eye movement.
+
+Rapid Serial Visual Presentation, or RSVP, eliminates saccades entirely. Instead of your eyes chasing words across a page, the words come to you, one at a time, at a fixed point on the screen. Your gaze stays perfectly still. The result is a significant reduction in the mechanical overhead of reading, which means more of your attention goes to understanding rather than scanning.
+
+There is a second insight built into this app: the Optimal Recognition Point. Research by O'Regan and Jacobs showed that every word has a sweet spot, typically the letter just to the left of center, where the brain identifies the word fastest. Speeedy aligns every single word to this exact position. Your eye lands on the pivot, and recognition happens at peak efficiency, flash after flash.
+
+Speed without comprehension is useless. That is why automatic pauses are inserted after punctuation, giving your working memory the fraction of a second it needs to consolidate each clause before the next one arrives. Combined with a gentle slow-start ramp at the beginning of each session, the experience is surprisingly comfortable even at speeds well above your normal reading pace.
+
+The average adult reads at around two hundred and thirty-eight words per minute. With practice on RSVP, many readers comfortably reach four hundred words per minute while maintaining strong comprehension. You just experienced a small sample. Hit play on your own text and see what your number is.`,
+		clipboardTextLoaded: "Text loaded from clipboard ✓",
+		clipboardEmpty: "Clipboard is empty",
+		clipboardLoaded: "Clipboard loaded ✓",
+		clipboardReadError: "Could not read clipboard — try Ctrl+V instead",
+		nothingToPreview:
+			"Nothing to preview yet. Paste some text or load a file first.",
+		nothingToRead:
+			"Nothing to read yet. Paste some text or load a file first.",
+		pastedText: "Pasted Text",
+		modifiedTitle: "{title} – modified",
+		saveDocumentError:
+			"Could not save this document. Try again, or paste a shorter text.",
+		themeDark: "Theme: Dark — click for light",
+		themeLight: "Theme: Light — click for dark",
+		landingPage: "Landing Page",
+		profile: "Profile",
+		stats: "Stats",
+		feedback: "Feedback",
+		readingQuestionPrefix: "What are you reading",
+		readingQuestionToday: "today?",
+		yourAverage: "Your avg:",
+		dropFilePrompt: "Drop a file or paste text to start reading",
+		demoLoadedPrefix: "A demo is loaded — hit",
+		beginReading: "Begin Reading",
+		demoLoadedSuffix: "to try RSVP, or paste your own text.",
+		findYourWpm: "Find your WPM →",
+		dismissHint: "Dismiss hint",
+		fileTab: "File",
+		textTab: "Text",
+		chooseWhereToStart: "Choose where to start",
+		learnAboutRsvp: "Learn more about RSVP",
+		forBloggers: "Speeedy for Bloggers",
+		privacy: "Privacy",
+		terms: "Terms",
+		fileUploadLabel: "Drop a file, or click to browse",
+		fileUploadHint:
+			"PDF · DOCX · DOC · TXT · EPUB · RTF · HTML · ODT · and more · up to 50 MB",
+		estimatedTime: " · ~{time} at {wpm} WPM",
+		extracted: "extracted ✓",
+		tryDemo: "Try a demo",
+		loadClipboardTitle: "Load text from clipboard",
+		pasteClipboard: "Paste clipboard",
+		titleLabel: "Title",
+		textToRead: "Text to read",
+		pasteTextPlaceholder: "Paste your text here…",
+		longDocumentPrefix: "Long document — use",
+		preview: "Preview",
+		longDocumentSuffix:
+			"to skip copyright / front matter and start where the book begins.",
+		wordCount: "{count} words{time}",
+		clear: "Clear",
+		recent: "Recent",
+		showAll: "Show all",
+		minimize: "Minimize",
+		showRecentDocuments: "Show recent documents",
+		minimizeRecentDocuments: "Minimize recent documents",
+		viewAll: "View All →",
+		readAgain: "Read again",
+		resumePercent: "Resume {percent}%",
+		documentMetadata: "{date} · {count} words",
+		edit: "Edit",
+		editDocument: "Edit {title}",
+		remove: "Remove",
+		removeDocument: "Remove {title}",
+	},
 	profile: {
 		pageTitle: "Profile",
 		language: "Language",

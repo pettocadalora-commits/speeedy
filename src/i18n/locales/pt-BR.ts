@@ -42,6 +42,83 @@ export const ptBR: Messages = {
 		sharedReadingTitle: "Leitura compartilhada",
 		badReadLink: "Não foi possível abrir esse link de leitura.",
 	},
+	app: {
+		demoTitle: "Demonstração: a ciência da leitura rápida",
+		demoText: `Toda vez que você lê uma linha de texto, seus olhos não se movem suavemente: eles saltam. Esses saltos rápidos são chamados de sacadas e acontecem de três a quatro vezes por segundo. Durante cada salto, você não lê absolutamente nada. Esse tempo morto representa cerca de dez por cento de cada sessão de leitura, desperdiçado apenas com o movimento dos olhos.
+
+A Apresentação Visual Serial Rápida, ou RSVP, elimina totalmente as sacadas. Em vez de seus olhos perseguirem as palavras pela página, elas vêm até você, uma de cada vez, em um ponto fixo da tela. Seu olhar permanece completamente imóvel. O resultado é uma redução significativa do esforço mecânico da leitura, o que permite direcionar mais atenção à compreensão em vez da varredura.
+
+Há uma segunda ideia incorporada a este aplicativo: o Ponto de Reconhecimento Ideal, ou ORP. Pesquisas de O'Regan e Jacobs mostraram que cada palavra tem um ponto ideal, normalmente a letra logo à esquerda do centro, onde o cérebro identifica a palavra mais rapidamente. O Speeedy alinha cada palavra exatamente nessa posição. Seu olho se fixa no ponto de referência e o reconhecimento acontece com eficiência máxima, palavra após palavra.
+
+Velocidade sem compreensão não serve para nada. É por isso que pausas automáticas são inseridas após a pontuação, dando à sua memória de trabalho a fração de segundo necessária para consolidar cada oração antes que a próxima apareça. Combinada a uma aceleração inicial suave no começo de cada sessão, a experiência é surpreendentemente confortável mesmo em velocidades muito acima do seu ritmo normal de leitura.
+
+Um adulto lê, em média, cerca de duzentas e trinta e oito palavras por minuto. Com a prática de RSVP, muitos leitores chegam confortavelmente a quatrocentas palavras por minuto mantendo uma boa compreensão. Você acabou de experimentar uma pequena amostra. Dê play no seu próprio texto e descubra qual é o seu número.`,
+		clipboardTextLoaded: "Texto carregado da área de transferência ✓",
+		clipboardEmpty: "A área de transferência está vazia",
+		clipboardLoaded: "Área de transferência carregada ✓",
+		clipboardReadError:
+			"Não foi possível ler a área de transferência — tente usar Ctrl+V",
+		nothingToPreview:
+			"Ainda não há nada para visualizar. Cole um texto ou carregue um arquivo primeiro.",
+		nothingToRead:
+			"Ainda não há nada para ler. Cole um texto ou carregue um arquivo primeiro.",
+		pastedText: "Texto colado",
+		modifiedTitle: "{title} – modificado",
+		saveDocumentError:
+			"Não foi possível salvar este documento. Tente novamente ou cole um texto mais curto.",
+		themeDark: "Tema: escuro — clique para usar o claro",
+		themeLight: "Tema: claro — clique para usar o escuro",
+		landingPage: "Página inicial",
+		profile: "Perfil",
+		stats: "Estatísticas",
+		feedback: "Feedback",
+		readingQuestionPrefix: "O que você está lendo",
+		readingQuestionToday: "hoje?",
+		yourAverage: "Sua média:",
+		dropFilePrompt: "Solte um arquivo ou cole um texto para começar a ler",
+		demoLoadedPrefix: "Uma demonstração está carregada — clique em",
+		beginReading: "Começar a ler",
+		demoLoadedSuffix: "para experimentar o RSVP ou cole seu próprio texto.",
+		findYourWpm: "Descubra seu WPM →",
+		dismissHint: "Dispensar dica",
+		fileTab: "Arquivo",
+		textTab: "Texto",
+		chooseWhereToStart: "Escolha onde começar",
+		learnAboutRsvp: "Saiba mais sobre RSVP",
+		forBloggers: "Speeedy para blogueiros",
+		privacy: "Privacidade",
+		terms: "Termos",
+		fileUploadLabel: "Solte um arquivo ou clique para procurar",
+		fileUploadHint:
+			"PDF · DOCX · DOC · TXT · EPUB · RTF · HTML · ODT · e mais · até 50 MB",
+		estimatedTime: " · ~{time} a {wpm} WPM",
+		extracted: "extraído ✓",
+		tryDemo: "Experimentar demonstração",
+		loadClipboardTitle: "Carregar texto da área de transferência",
+		pasteClipboard: "Colar da área de transferência",
+		titleLabel: "Título",
+		textToRead: "Texto para ler",
+		pasteTextPlaceholder: "Cole seu texto aqui…",
+		longDocumentPrefix: "Documento longo — use",
+		preview: "Visualizar",
+		longDocumentSuffix:
+			"para pular os direitos autorais / elementos pré-textuais e começar onde o livro começa.",
+		wordCount: "{count} palavras{time}",
+		clear: "Limpar",
+		recent: "Recentes",
+		showAll: "Mostrar tudo",
+		minimize: "Minimizar",
+		showRecentDocuments: "Mostrar documentos recentes",
+		minimizeRecentDocuments: "Minimizar documentos recentes",
+		viewAll: "Ver tudo →",
+		readAgain: "Ler novamente",
+		resumePercent: "Retomar em {percent}%",
+		documentMetadata: "{date} · {count} palavras",
+		edit: "Editar",
+		editDocument: "Editar {title}",
+		remove: "Remover",
+		removeDocument: "Remover {title}",
+	},
 	profile: {
 		pageTitle: "Perfil",
 		language: "Idioma",
