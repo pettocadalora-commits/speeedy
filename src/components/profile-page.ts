@@ -99,7 +99,9 @@ export class ProfilePage extends LitElement {
 		});
 		this.savedDocs = await getSavedDocuments();
 		this.docUploadError = "";
-		this.docUploadSuccess = `"${doc.title}" added to your library.`;
+		this.docUploadSuccess = this.i18n.t("profile.documentAdded", {
+			title: doc.title,
+		});
 		setTimeout(() => {
 			this.docUploadSuccess = "";
 		}, 4000);
@@ -158,9 +160,9 @@ export class ProfilePage extends LitElement {
 
 	private renderSectionTabs() {
 		const sections = [
-			{ id: "profile", label: "Profile" },
-			{ id: "library", label: "Library" },
-			{ id: "data", label: "Data" },
+			{ id: "profile", label: this.i18n.t("profile.profileTab") },
+			{ id: "library", label: this.i18n.t("profile.libraryTab") },
+			{ id: "data", label: this.i18n.t("profile.dataTab") },
 		] as const;
 		return html`
       <div class="tabs tabs-bordered">
@@ -201,7 +203,7 @@ export class ProfilePage extends LitElement {
           <div class="w-20 h-20 rounded-full bg-base-200 flex items-center justify-center overflow-hidden select-none shrink-0 border border-base-200">
             ${
 							hasAvatarImage && p.avatarImage
-								? html`<img src=${p.avatarImage} alt="Profile avatar" class="w-full h-full object-cover" />`
+								? html`<img src=${p.avatarImage} alt=${this.i18n.t("profile.avatarAlt")} class="w-full h-full object-cover" />`
 								: html`<span class="text-4xl">${p.avatarEmoji}</span>`
 						}
           </div>
@@ -210,7 +212,7 @@ export class ProfilePage extends LitElement {
 							this.editingName
 								? html`
             <div class="flex items-center gap-2">
-              <label for="display-name-input" class="sr-only">Display name</label>
+              <label for="display-name-input" class="sr-only">${this.i18n.t("profile.displayName")}</label>
               <input
                 id="display-name-input"
                 type="text"
@@ -237,7 +239,7 @@ export class ProfilePage extends LitElement {
 									displayName: this.nameInput.trim() || p.displayName,
 								});
 								this.editingName = false;
-							}}>Save</button>
+			}}>${this.i18n.t("common.save")}</button>
             </div>
           `
 								: html`
@@ -247,7 +249,7 @@ export class ProfilePage extends LitElement {
 								this.nameInput = p.displayName;
 								this.editingName = true;
 							}}
-              aria-label="Edit display name"
+              aria-label=${this.i18n.t("profile.editDisplayName")}
             >
               <span class="text-ui-title font-semibold">${p.displayName}</span>
               <svg class="w-3.5 h-3.5 text-ui-muted-subtle group-hover:text-ui-muted transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -258,7 +260,7 @@ export class ProfilePage extends LitElement {
           `
 						}
             <p class="text-ui-body text-ui-muted">
-              Member since ${new Date(p.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "long" })}
+              ${this.i18n.t("profile.memberSince", { date: new Date(p.createdAt).toLocaleDateString(this.i18n.locale, { year: "numeric", month: "long" }) })}
             </p>
           </div>
         </div>
@@ -267,11 +269,11 @@ export class ProfilePage extends LitElement {
         <div class="flex flex-col gap-5">
           <!-- Upload image -->
           <div class="flex flex-col gap-2">
-            <span class="text-ui-body uppercase tracking-widest text-ui-muted font-semibold">Profile Image</span>
+            <span class="text-ui-body uppercase tracking-widest text-ui-muted font-semibold">${this.i18n.t("profile.profileImage")}</span>
             <div class="flex items-center gap-2 flex-wrap">
               <label class="btn btn-outline btn-sm gap-2 cursor-pointer">
                 ${icon(Upload, "w-4 h-4")}
-                ${this.isUploadingAvatar ? "Uploading..." : hasAvatarImage ? "Change image" : "Upload image"}
+                ${this.isUploadingAvatar ? this.i18n.t("profile.uploadingImage") : hasAvatarImage ? this.i18n.t("profile.changeImage") : this.i18n.t("profile.uploadImage")}
                 <input
                   type="file"
                   accept="image/*"
@@ -286,20 +288,20 @@ export class ProfilePage extends LitElement {
                 class="btn btn-ghost btn-sm text-error"
                 @click=${() => this.updateProfile({ avatarImage: null })}
               >
-                Remove
+                ${this.i18n.t("profile.removeImage")}
               </button>
             `
 									: ""
 							}
             </div>
             <p class="text-ui-body text-ui-muted-subtle">
-              Stored only in your browser.
+              ${this.i18n.t("profile.imageStoredLocally")}
             </p>
           </div>
 
           <!-- Emoji Picker -->
           <div class="flex flex-col gap-2">
-            <span class="text-ui-body uppercase tracking-widest text-ui-muted font-semibold">Emoji Avatar</span>
+            <span class="text-ui-body uppercase tracking-widest text-ui-muted font-semibold">${this.i18n.t("profile.emojiAvatar")}</span>
 
             <!-- Quick presets -->
             <div class="flex flex-wrap gap-1.5">
@@ -313,7 +315,7 @@ export class ProfilePage extends LitElement {
 													: "bg-base-200/60 hover:bg-base-200"
 											}"
                     @click=${() => this.updateProfile({ avatarEmoji: emoji })}
-                    aria-label="Set avatar to ${emoji}"
+					aria-label=${this.i18n.t("profile.setAvatarTo", { emoji })}
                     aria-pressed="${p.avatarEmoji === emoji}"
                   >${emoji}</button>
                 `,
@@ -322,7 +324,7 @@ export class ProfilePage extends LitElement {
 
             <!-- Custom emoji input -->
             <div class="flex items-center gap-2 mt-1">
-              <label for="custom-emoji-input" class="sr-only">Custom emoji</label>
+              <label for="custom-emoji-input" class="sr-only">${this.i18n.t("profile.customEmoji")}</label>
               <input
                 id="custom-emoji-input"
                 type="text"
@@ -342,7 +344,7 @@ export class ProfilePage extends LitElement {
 								}}
               />
               <span class="text-ui-body text-ui-muted">
-                Or type / paste any emoji you like.
+                ${this.i18n.t("profile.customEmojiHint")}
               </span>
             </div>
           </div>
@@ -350,19 +352,19 @@ export class ProfilePage extends LitElement {
 
         <!-- Stats Summary -->
         <div class="flex flex-col gap-2">
-          <span class="text-ui-body uppercase tracking-widest text-ui-muted font-semibold">Reading Stats</span>
+          <span class="text-ui-body uppercase tracking-widest text-ui-muted font-semibold">${this.i18n.t("profile.readingStats")}</span>
           <div class="grid grid-cols-3 gap-3">
             <div class="border border-base-200 rounded-xl px-4 py-3 text-center">
               <div class="text-ui-title font-semibold tabular-nums">${formatNumber(p.totalWordsRead)}</div>
-              <div class="text-ui-body text-ui-muted uppercase tracking-widest mt-0.5">Words</div>
+              <div class="text-ui-body text-ui-muted uppercase tracking-widest mt-0.5">${this.i18n.t("profile.words")}</div>
             </div>
             <div class="border border-primary/20 bg-primary/5 rounded-xl px-4 py-3 text-center">
               <div class="text-ui-title font-semibold tabular-nums">${getAverageWpm(p) || "—"}</div>
-              <div class="text-ui-body text-primary uppercase tracking-widest mt-0.5 font-semibold">Avg WPM</div>
+              <div class="text-ui-body text-primary uppercase tracking-widest mt-0.5 font-semibold">${this.i18n.t("profile.averageWpm")}</div>
             </div>
             <div class="border border-base-200 rounded-xl px-4 py-3 text-center">
               <div class="text-ui-title font-semibold tabular-nums">${formatDuration(p.totalTimeMs)}</div>
-              <div class="text-ui-body text-ui-muted uppercase tracking-widest mt-0.5">Time</div>
+              <div class="text-ui-body text-ui-muted uppercase tracking-widest mt-0.5">${this.i18n.t("profile.time")}</div>
             </div>
           </div>
         </div>
@@ -370,9 +372,9 @@ export class ProfilePage extends LitElement {
         <!-- Baseline + Improvement -->
         <div class="border border-base-200 rounded-xl p-4">
           <div class="flex items-center justify-between mb-3">
-            <span class="text-ui-body uppercase tracking-widest text-ui-muted font-semibold">Reading Progress</span>
+            <span class="text-ui-body uppercase tracking-widest text-ui-muted font-semibold">${this.i18n.t("profile.readingProgress")}</span>
             <a href="#/benchmark" class="text-ui-body text-primary hover:underline underline-offset-2 font-semibold">
-              ${p.baselineWpm ? "Retest →" : "Take the test →"}
+              ${p.baselineWpm ? this.i18n.t("profile.retest") : this.i18n.t("profile.takeTest")}
             </a>
           </div>
           ${
@@ -381,11 +383,11 @@ export class ProfilePage extends LitElement {
             <div class="grid grid-cols-3 gap-3">
               <div class="text-center">
                 <div class="text-ui-title font-semibold">${p.baselineWpm}</div>
-                <div class="text-ui-body text-ui-muted mt-0.5">Baseline WPM</div>
+                <div class="text-ui-body text-ui-muted mt-0.5">${this.i18n.t("profile.baselineWpm")}</div>
               </div>
               <div class="text-center">
                 <div class="text-ui-title font-semibold">${getAverageWpm(p) || "—"}</div>
-                <div class="text-ui-body text-ui-muted mt-0.5">Current Avg WPM</div>
+                <div class="text-ui-body text-ui-muted mt-0.5">${this.i18n.t("profile.currentAverageWpm")}</div>
               </div>
               <div class="text-center">
                 ${
@@ -394,16 +396,16 @@ export class ProfilePage extends LitElement {
                   <div class="text-ui-title font-semibold text-success">
                     +${Math.round(((getAverageWpm(p) - p.baselineWpm) / p.baselineWpm) * 100)}%
                   </div>
-                  <div class="text-ui-body text-success mt-0.5 font-semibold">Improvement</div>
+                  <div class="text-ui-body text-success mt-0.5 font-semibold">${this.i18n.t("profile.improvement")}</div>
                 `
 										: getAverageWpm(p) && getAverageWpm(p) < p.baselineWpm
 											? html`
                   <div class="text-ui-title font-semibold text-ui-muted">—</div>
-                  <div class="text-ui-body text-ui-muted mt-0.5">Keep reading!</div>
+                  <div class="text-ui-body text-ui-muted mt-0.5">${this.i18n.t("profile.keepReading")}</div>
                 `
 											: html`
                   <div class="text-ui-title font-semibold text-ui-muted">—</div>
-                  <div class="text-ui-body text-ui-muted mt-0.5">More sessions needed</div>
+                  <div class="text-ui-body text-ui-muted mt-0.5">${this.i18n.t("profile.moreSessionsNeeded")}</div>
                 `
 								}
               </div>
@@ -412,7 +414,7 @@ export class ProfilePage extends LitElement {
 							p.baselineComprehension !== null
 								? html`
               <div class="mt-2 pt-2 border-t border-base-200/60 text-ui-body text-ui-muted flex items-center justify-between">
-                <span>Baseline comprehension</span>
+                <span>${this.i18n.t("profile.baselineComprehension")}</span>
                 <span class="font-mono">${p.baselineComprehension}%</span>
               </div>
             `
@@ -421,7 +423,7 @@ export class ProfilePage extends LitElement {
           `
 							: html`
             <p class="text-ui-body text-ui-muted">
-              No baseline yet. Take the reading test to measure your WPM and comprehension — then track your improvement over time.
+              ${this.i18n.t("profile.noBaseline")}
             </p>
           `
 					}
@@ -429,15 +431,12 @@ export class ProfilePage extends LitElement {
 
         <!-- Share -->
         <div class="flex flex-col gap-3">
-          <span class="text-ui-body uppercase tracking-widest text-ui-muted font-semibold">Share Profile</span>
+          <span class="text-ui-body uppercase tracking-widest text-ui-muted font-semibold">${this.i18n.t("profile.shareProfile")}</span>
 
           <div class="rounded-xl border border-warning/35 bg-warning/8 px-4 py-3 flex flex-col gap-2">
-            <p class="text-ui-body font-semibold uppercase tracking-widest text-warning">⚠ Privacy notice</p>
+            <p class="text-ui-body font-semibold uppercase tracking-widest text-warning">⚠ ${this.i18n.t("profile.privacyNotice")}</p>
             <p class="text-ui-body text-ui-muted leading-relaxed">
-              Shared profile links embed your selected stats directly in the URL.
-              Analytics scripts, browser extensions, screenshots, or anyone you send the link to
-              may be able to read any personal details included in that URL.
-              Only share a link with personal information if you are comfortable with that.
+              ${this.i18n.t("profile.privacyDescription")}
             </p>
           </div>
 
@@ -456,7 +455,7 @@ export class ProfilePage extends LitElement {
 							}}
             />
             <span class="text-ui-body text-ui-muted leading-relaxed">
-              I understand that personal details in a shared link may be visible to analytics tools or anyone with the URL.
+              ${this.i18n.t("profile.privacyAcknowledgment")}
             </span>
           </label>
 
@@ -476,7 +475,7 @@ export class ProfilePage extends LitElement {
 								}}
               />
               <span class="text-ui-body text-ui-muted leading-relaxed">
-                Include profile image in the shared card and link — increases privacy risk and may make the URL much longer.
+                ${this.i18n.t("profile.includeProfileImage")}
               </span>
             </label>
           `
@@ -503,19 +502,19 @@ export class ProfilePage extends LitElement {
 							}}
             >
               ${icon(Share2, "w-4 h-4")}
-              Share Stats Card
+              ${this.i18n.t("profile.shareStatsCard")}
             </button>
             <button
               class="btn btn-ghost btn-sm"
               @click=${() => navigate("stats")}
-            >View Full Stats →</button>
+            >${this.i18n.t("profile.viewFullStats")}</button>
           </div>
 
           ${
 						!this.sharePrivacyAcknowledged
 							? html`
             <p class="text-ui-body text-warning/90 font-normal">
-              Acknowledge the privacy notice above to enable personal info in shared links.
+              ${this.i18n.t("profile.acknowledgePrivacy")}
             </p>
           `
 							: ""
@@ -530,8 +529,8 @@ export class ProfilePage extends LitElement {
       <div class="flex flex-col gap-5 pb-8">
         <!-- Export -->
         <div class="border border-base-200 rounded-xl p-5">
-            <h3 class="font-semibold mb-1 text-base-content">Export Profile</h3>
-            <p class="text-ui-body text-ui-muted mb-4 leading-relaxed">Download a <code class="text-ui-body font-mono bg-base-200 px-1 py-0.5 rounded">.speeedy</code> backup file with all your settings, history, and stats.</p>
+            <h3 class="font-semibold mb-1 text-base-content">${this.i18n.t("profile.exportProfile")}</h3>
+			<p class="text-ui-body text-ui-muted mb-4 leading-relaxed">${this.i18n.t("profile.downloadBackupPrefix")} <code class="text-ui-body font-mono bg-base-200 px-1 py-0.5 rounded">.speeedy</code> ${this.i18n.t("profile.downloadBackupSuffix")}</p>
             <button
               class="btn btn-outline btn-sm w-fit gap-2"
               data-umami-event="profile-exported"
@@ -541,17 +540,17 @@ export class ProfilePage extends LitElement {
 							}}
             >
               ${icon(Download, "w-4 h-4")}
-              Download .speeedy
+              ${this.i18n.t("profile.downloadSpeeedy")}
             </button>
         </div>
 
         <!-- Import -->
         <div class="border border-base-200 rounded-xl p-5">
-            <h3 class="font-semibold mb-1 text-base-content">Import Profile</h3>
-            <p class="text-ui-body text-ui-muted mb-4 leading-relaxed">Restore from a previously exported <code class="text-ui-body font-mono bg-base-200 px-1 py-0.5 rounded">.speeedy</code> file. This will overwrite your current data.</p>
+            <h3 class="font-semibold mb-1 text-base-content">${this.i18n.t("profile.importProfile")}</h3>
+			<p class="text-ui-body text-ui-muted mb-4 leading-relaxed">${this.i18n.t("profile.restoreBackupPrefix")} <code class="text-ui-body font-mono bg-base-200 px-1 py-0.5 rounded">.speeedy</code> ${this.i18n.t("profile.restoreBackupSuffix")}</p>
             <label class="btn btn-outline btn-sm w-fit gap-2 cursor-pointer">
               ${icon(Upload, "w-4 h-4")}
-              Import .speeedy
+              ${this.i18n.t("profile.importSpeeedy")}
               <input
                 type="file"
                 accept=".speeedy,.json"
@@ -569,14 +568,14 @@ export class ProfilePage extends LitElement {
 
         <!-- Reset -->
         <div class="border border-error/20 rounded-xl p-5">
-            <h3 class="font-semibold text-error mb-1">Reset All Data</h3>
-            <p class="text-ui-body text-ui-muted mb-4 leading-relaxed">Permanently delete all reading history, settings, and stats. This cannot be undone.</p>
+            <h3 class="font-semibold text-error mb-1">${this.i18n.t("profile.resetAllData")}</h3>
+			<p class="text-ui-body text-ui-muted mb-4 leading-relaxed">${this.i18n.t("profile.resetAllDataDescription")}</p>
             <button
               class="btn btn-error btn-outline btn-sm w-fit"
               @click=${async () => {
 								if (
 									confirm(
-										"Are you sure? This will permanently delete all your data.",
+										this.i18n.t("profile.resetConfirmation"),
 									)
 								) {
 									const fresh = {
@@ -591,7 +590,7 @@ export class ProfilePage extends LitElement {
 									emitProfileUpdated(fresh);
 								}
 							}}
-            >Reset Data</button>
+            >${this.i18n.t("profile.resetData")}</button>
         </div>
       </div>
     `;
@@ -608,8 +607,8 @@ export class ProfilePage extends LitElement {
 			<div class="mb-4">
 				<speeedy-file-uploader
 					compact
-					label="Add a document to your library"
-					hint="PDF · DOCX · TXT · EPUB · RTF · HTML · ODT · and more"
+					.label=${this.i18n.t("profile.addDocument")}
+					.hint=${this.i18n.t("profile.supportedDocumentTypes")}
 					@file-parsed=${this.handleDocFileParsed}
 					@file-error=${this.handleDocFileError}
 				></speeedy-file-uploader>
@@ -640,8 +639,8 @@ export class ProfilePage extends LitElement {
 					${uploaderBlock}
 					<div class="text-center py-8 opacity-60">
 						${icon(BookOpen, "w-8 h-8 mx-auto mb-3 opacity-50")}
-						<p class="text-ui-body text-ui-muted">Your library is empty.</p>
-						<button class="btn btn-ghost btn-sm mt-2" @click=${() => navigate("app")}>Read something</button>
+						<p class="text-ui-body text-ui-muted">${this.i18n.t("profile.emptyLibrary")}</p>
+						<button class="btn btn-ghost btn-sm mt-2" @click=${() => navigate("app")}>${this.i18n.t("profile.readSomething")}</button>
 					</div>
 				</div>
 			`;
@@ -653,9 +652,9 @@ export class ProfilePage extends LitElement {
 				<div class="flex items-center justify-between mb-1 px-1">
 					<div class="flex items-center gap-2">
 						${icon(BookOpen, "w-4 h-4 text-ui-muted-subtle")}
-						<span class="text-ui-body font-semibold text-base-content">Reading History</span>
+						<span class="text-ui-body font-semibold text-base-content">${this.i18n.t("profile.readingHistory")}</span>
 					</div>
-					<span class="text-ui-body text-ui-muted">${this.savedDocs.length} total</span>
+					<span class="text-ui-body text-ui-muted">${this.i18n.t("profile.totalDocuments", { count: this.savedDocs.length })}</span>
 				</div>
 
 				<div class="flex flex-col gap-2">
@@ -674,7 +673,7 @@ export class ProfilePage extends LitElement {
 								window.scrollTo({ top: 0, behavior: "smooth" });
 							}}
 						>
-							${icon(ArrowLeft, "w-3.5 h-3.5")} Prev
+							${icon(ArrowLeft, "w-3.5 h-3.5")} ${this.i18n.t("profile.previousPage")}
 						</button>
 						<span class="text-ui-body font-mono text-ui-muted bg-base-200 px-3 py-1 rounded-full">
 							${this.libraryPage} / ${totalPages}
@@ -687,7 +686,7 @@ export class ProfilePage extends LitElement {
 								window.scrollTo({ top: 0, behavior: "smooth" });
 							}}
 						>
-							Next <svg class="w-3.5 h-3.5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+							${this.i18n.t("common.next")} <svg class="w-3.5 h-3.5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
 						</button>
 					</div>
 				`
@@ -700,7 +699,11 @@ export class ProfilePage extends LitElement {
 	private renderDocCard(doc: SavedDocument) {
 		const pct = doc.completionPercent;
 		const resumeLabel =
-			pct >= 98 ? "Read again" : pct > 0 ? `Resume ${pct}%` : "Start";
+			pct >= 98
+				? this.i18n.t("profile.readAgain")
+				: pct > 0
+					? this.i18n.t("profile.resumePercent", { percent: pct })
+					: this.i18n.t("common.start");
 		const date = new Date(doc.savedAt).toLocaleDateString(undefined, {
 			year: "numeric",
 			month: "short",
@@ -713,7 +716,7 @@ export class ProfilePage extends LitElement {
           <div class="text-ui-body font-semibold text-base-content truncate pr-4">${doc.title}</div>
           <div class="flex items-center gap-2 mt-1">
             ${icon(Clock, "w-3 h-3 text-ui-muted-subtle")}
-            <span class="text-ui-body text-ui-muted">${date} · ${doc.wordCount.toLocaleString()} words</span>
+            <span class="text-ui-body text-ui-muted">${this.i18n.t("profile.documentMetadata", { date, count: doc.wordCount.toLocaleString(this.i18n.locale) })}</span>
           </div>
           ${
 						pct > 0 && pct < 98
@@ -728,7 +731,7 @@ export class ProfilePage extends LitElement {
         <div class="flex items-center gap-1.5 shrink-0 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             class="btn btn-ghost btn-sm btn-circle text-error/60 hover:text-error hover:bg-error/10"
-            title="Delete"
+			title=${this.i18n.t("common.delete")}
             @click=${async () => {
 							await deleteSavedDocument(doc.id);
 							this.savedDocs = await getSavedDocuments();
@@ -769,10 +772,10 @@ export class ProfilePage extends LitElement {
         <div class="bg-base-100 rounded-2xl w-full max-w-xl shadow-2xl border border-base-200">
           <!-- Header -->
           <div class="flex items-center justify-between px-5 py-4 border-b border-base-200">
-            <h3 class="text-ui-title font-semibold text-base-content">Share Your Stats</h3>
+            <h3 class="text-ui-title font-semibold text-base-content">${this.i18n.t("profile.shareYourStats")}</h3>
             <button
               class="btn btn-ghost btn-xs btn-circle"
-              aria-label="Close share modal"
+              aria-label=${this.i18n.t("profile.closeShareModal")}
               @click=${() => {
 								this.showShareCard = false;
 							}}
@@ -794,14 +797,14 @@ export class ProfilePage extends LitElement {
               ?disabled=${this.savingPng}
               @click=${() => void this.saveCardAsPng()}
             >
-              ${this.savingPng ? html`<span class="loading loading-spinner loading-xs"></span> Saving…` : "Save card as PNG"}
+              ${this.savingPng ? html`<span class="loading loading-spinner loading-xs"></span> ${this.i18n.t("profile.savingPng")}` : this.i18n.t("profile.saveCardAsPng")}
             </button>
 
             <!-- Shareable link -->
             <div class="flex flex-col gap-1.5">
-              <span class="text-ui-body uppercase tracking-widest text-ui-muted font-semibold">Shareable Link</span>
+              <span class="text-ui-body uppercase tracking-widest text-ui-muted font-semibold">${this.i18n.t("profile.shareableLink")}</span>
               <div class="flex gap-2">
-                <label for="share-url-input" class="sr-only">Shareable link</label>
+                <label for="share-url-input" class="sr-only">${this.i18n.t("profile.shareableLink")}</label>
                 <input
                   id="share-url-input"
                   type="text"
@@ -811,16 +814,16 @@ export class ProfilePage extends LitElement {
                 />
                 <button
                   class="btn btn-sm btn-outline shrink-0"
-                  aria-label="Copy shareable link"
+				  aria-label=${this.i18n.t("profile.copyShareableLink")}
                   @click=${() => void navigator.clipboard.writeText(this.shareUrl)}
-                >Copy</button>
+                >${this.i18n.t("common.copy")}</button>
                 <a
                   href=${this.shareUrl}
                   target="_blank"
                   rel="noopener"
                   class="btn btn-sm btn-ghost shrink-0"
-                  aria-label="Preview share card in new tab"
-                  title="Preview in new tab"
+				  aria-label=${this.i18n.t("profile.previewShareCard")}
+				  title=${this.i18n.t("profile.previewNewTab")}
                 >
                   <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -848,7 +851,7 @@ export class ProfilePage extends LitElement {
 			a.download = `speeedy-stats-${this.profile.displayName.replace(/\s+/g, "-")}.png`;
 			a.click();
 		} catch {
-			alert("Could not save the image. Please try again.");
+			alert(this.i18n.t("profile.saveImageError"));
 		} finally {
 			this.savingPng = false;
 		}
@@ -858,7 +861,7 @@ export class ProfilePage extends LitElement {
 		const file = (e.target as HTMLInputElement).files?.[0];
 		if (!file) return;
 		if (!file.type.startsWith("image/")) {
-			alert("Please choose an image file.");
+			alert(this.i18n.t("profile.chooseImageFile"));
 			return;
 		}
 
@@ -883,13 +886,13 @@ export class ProfilePage extends LitElement {
 				requestAnimationFrame(() => this.drawCropPreview());
 			};
 			img.onerror = () => {
-				alert("Could not read that image file.");
+				alert(this.i18n.t("profile.readImageError"));
 				this.isUploadingAvatar = false;
 			};
 			img.src = dataUrl;
 		};
 		reader.onerror = () => {
-			alert("Could not read that image file.");
+			alert(this.i18n.t("profile.readImageError"));
 			this.isUploadingAvatar = false;
 		};
 		reader.readAsDataURL(file);
@@ -997,12 +1000,12 @@ export class ProfilePage extends LitElement {
           <!-- Header -->
           <div class="flex items-center justify-between px-5 py-4 border-b border-base-200/70">
             <div>
-              <h3 class="text-ui-body font-semibold text-base-content leading-none">Adjust image</h3>
-              <p class="text-ui-body text-ui-muted mt-1">Drag to reposition · scroll to zoom</p>
+              <h3 class="text-ui-body font-semibold text-base-content leading-none">${this.i18n.t("profile.adjustImage")}</h3>
+              <p class="text-ui-body text-ui-muted mt-1">${this.i18n.t("profile.cropInstructions")}</p>
             </div>
             <button
               class="btn btn-ghost btn-xs btn-circle opacity-50 hover:opacity-100"
-              aria-label="Close"
+			  aria-label=${this.i18n.t("common.close")}
               @click=${() => {
 								this.showAvatarCrop = false;
 							}}
@@ -1028,7 +1031,7 @@ export class ProfilePage extends LitElement {
           <!-- Zoom slider -->
           <div class="px-5 pt-4 pb-2">
             <div class="flex items-center justify-between mb-2">
-              <label for="crop-zoom" class="text-ui-body text-ui-muted uppercase tracking-widest font-semibold">Zoom</label>
+              <label for="crop-zoom" class="text-ui-body text-ui-muted uppercase tracking-widest font-semibold">${this.i18n.t("profile.zoom")}</label>
               <span class="text-ui-body font-mono text-ui-muted-subtle">${Math.round(this.cropZoom * 100)}%</span>
             </div>
             <input
@@ -1053,18 +1056,18 @@ export class ProfilePage extends LitElement {
 								this.cropOffsetY = 0;
 								this.drawCropPreview();
 							}}
-            >Reset</button>
+            >${this.i18n.t("common.reset")}</button>
             <div class="flex gap-2">
               <button
                 class="btn btn-ghost btn-sm"
                 @click=${() => {
 									this.showAvatarCrop = false;
 								}}
-              >Cancel</button>
+              >${this.i18n.t("common.cancel")}</button>
               <button
                 class="btn btn-primary btn-sm px-5"
                 @click=${() => void this.applyAvatarCrop()}
-              >Apply</button>
+              >${this.i18n.t("profile.apply")}</button>
             </div>
           </div>
         </div>
@@ -1092,7 +1095,7 @@ export class ProfilePage extends LitElement {
 			const dataUrl = offscreen.toDataURL("image/jpeg", 0.85);
 			this.updateProfile({ avatarImage: dataUrl });
 		} catch {
-			alert("Could not process that image. Please try a smaller file.");
+			alert(this.i18n.t("profile.processImageError"));
 		} finally {
 			this.showAvatarCrop = false;
 			this.pendingAvatarDataUrl = null;
