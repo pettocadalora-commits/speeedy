@@ -20,11 +20,13 @@ import { applyTheme } from "../services/theme-service.js";
 import { trackEvent, wpmBracket } from "../utils/analytics.js";
 import { emitProfileUpdated, navigate, showToast } from "../utils/events.js";
 import { stripCitations } from "../utils/text-utils.js";
+import { LocaleController } from "../i18n/controller.js";
 import "./settings-panel.ts";
 import "./wellness-overlay.ts";
 
 @customElement("rsvp-reader")
 export class RsvpReader extends LitElement {
+	private i18n = new LocaleController(this);
 	protected override createRenderRoot() {
 		return this;
 	}
@@ -138,7 +140,7 @@ export class RsvpReader extends LitElement {
 		if (wordCount === 0) return;
 
 		const saved = await saveDocument({
-			title: "Pasted Text",
+			title: this.i18n.t("reader.pastedText"),
 			text,
 			wordCount,
 			resumeWordIndex: 0,
@@ -153,7 +155,7 @@ export class RsvpReader extends LitElement {
 			wordCount: saved.wordCount,
 		});
 
-		showToast("Text loaded from clipboard ✓", "success");
+		showToast(this.i18n.t("reader.clipboardTextLoaded"), "success");
 		trackEvent("clipboard-paste-reader", { words: wordCount });
 	};
 
@@ -621,7 +623,7 @@ export class RsvpReader extends LitElement {
 					? html`
 				<div class="absolute inset-0 z-40 flex items-center justify-center bg-base-100" aria-live="assertive" aria-atomic="true">
 					<span class="countdown-number text-9xl font-bold text-primary tabular-nums" key=${this.countdownNumber}>
-						${this.countdownNumber > 0 ? this.countdownNumber : "GO"}
+						${this.countdownNumber > 0 ? this.countdownNumber : this.i18n.t("reader.go")}
 					</span>
 				</div>
 			`
@@ -642,14 +644,14 @@ export class RsvpReader extends LitElement {
 							type="button"
 							class="btn btn-ghost btn-md btn-circle shrink-0 min-h-[44px] min-w-[44px] touch-manipulation"
 							@click=${this.handleBack}
-							title="Back to home (Esc)"
-							aria-label="Back to home"
+							title=${this.i18n.t("reader.backToHomeShortcut")}
+							aria-label=${this.i18n.t("reader.backToHome")}
 						>
 							<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
 							</svg>
 						</button>
-							<span class="text-xs md:text-sm text-base-content/70 truncate font-light tracking-wide">${this.docTitle || "No document"}</span>
+							<span class="text-xs md:text-sm text-base-content/70 truncate font-light tracking-wide">${this.docTitle || this.i18n.t("reader.noDocument")}</span>
 						</div>
 						<div class="flex items-center gap-1 md:gap-2 shrink-0 relative z-50">
 							<span class="text-xs md:text-sm text-base-content/55 font-mono hidden md:block mr-2">
@@ -673,8 +675,8 @@ export class RsvpReader extends LitElement {
 							@click=${() => {
 								this.showShortcuts = true;
 							}}
-							title="Keyboard shortcuts (?)"
-							aria-label="Show keyboard shortcuts"
+							title=${this.i18n.t("reader.keyboardShortcutsHint")}
+							aria-label=${this.i18n.t("reader.showKeyboardShortcuts")}
 						>
 							<svg class="w-5 h-5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -688,8 +690,8 @@ export class RsvpReader extends LitElement {
 							@click=${() => {
 								this.showSettings = !this.showSettings;
 							}}
-							title="Settings"
-							aria-label="${this.showSettings ? "Close settings" : "Open settings"}"
+							title=${this.i18n.t("reader.settings")}
+							aria-label=${this.showSettings ? this.i18n.t("reader.closeSettings") : this.i18n.t("reader.openSettings")}
 							aria-expanded="${this.showSettings}"
 						>
 							<svg class="w-5 h-5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -779,8 +781,8 @@ export class RsvpReader extends LitElement {
 			<div class="hidden md:flex transition-all duration-300 ${this.showSettings ? "w-80 border-l border-base-200" : "w-0"} overflow-hidden shrink-0 bg-base-100 flex-col relative z-40">
 				<div class="w-80 flex flex-col h-full overflow-hidden">
 					<div class="px-5 py-4 border-b border-base-200 flex items-center justify-between shrink-0">
-						<span class="text-sm font-medium text-base-content/70 tracking-wide">Settings</span>
-						<button class="btn btn-ghost btn-sm btn-circle" aria-label="Close settings" @click=${() => {
+						<span class="text-sm font-medium text-base-content/70 tracking-wide">${this.i18n.t("reader.settings")}</span>
+						<button class="btn btn-ghost btn-sm btn-circle" aria-label=${this.i18n.t("reader.closeSettings")} @click=${() => {
 							this.showSettings = false;
 						}}>
 							<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -815,10 +817,10 @@ export class RsvpReader extends LitElement {
 					aria-hidden="true"
 				></div>
 				<!-- Sheet -->
-				<div class="relative bg-base-100 rounded-t-2xl max-h-[80vh] flex flex-col shadow-2xl z-10 w-full" role="dialog" aria-label="Reader settings">
+				<div class="relative bg-base-100 rounded-t-2xl max-h-[80vh] flex flex-col shadow-2xl z-10 w-full" role="dialog" aria-label=${this.i18n.t("reader.readerSettings")}>
 					<div class="flex items-center justify-between px-5 py-4 border-b border-base-200 shrink-0">
-						<span class="text-sm font-medium text-base-content/70 tracking-wide">Settings</span>
-						<button class="btn btn-ghost btn-sm btn-circle" aria-label="Close settings" @click=${() => {
+						<span class="text-sm font-medium text-base-content/70 tracking-wide">${this.i18n.t("reader.settings")}</span>
+						<button class="btn btn-ghost btn-sm btn-circle" aria-label=${this.i18n.t("reader.closeSettings")} @click=${() => {
 							this.showSettings = false;
 						}}>
 							<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -846,9 +848,9 @@ export class RsvpReader extends LitElement {
 	private renderEmptyState() {
 		return html`
       <div class="text-center">
-        <p class="text-base-content/65 text-lg font-light mb-4">No document loaded</p>
+        <p class="text-base-content/65 text-lg font-light mb-4">${this.i18n.t("reader.noDocumentLoaded")}</p>
         <button class="btn btn-primary btn-sm" @click=${() => navigate("app")}>
-          Load a document
+          ${this.i18n.t("reader.loadDocument")}
         </button>
       </div>
     `;
@@ -874,7 +876,7 @@ export class RsvpReader extends LitElement {
         style="font-size: ${this.settings.fontSize * 0.45}px; font-family: '${this.settings.fontFamily}', monospace; line-height: 1.8; letter-spacing: 0.02em; word-spacing: 0.1em; max-width: 720px; margin: 0 auto; scroll-behavior: smooth;"
       >
         <p class="text-xs text-base-content/40 mb-3 text-center font-mono">
-          Paused — click any word to jump to it, then press play
+          ${this.i18n.t("reader.pausedInstructions")}
         </p>
         <p class="text-base-content/80 text-start" dir="auto">
           ${displayTokens.map(
@@ -1099,7 +1101,7 @@ export class RsvpReader extends LitElement {
         id="ticker-container"
         class="w-full h-full flex items-center overflow-hidden relative"
         aria-live="polite"
-        aria-label="Reading: ${s.currentTokens.map((t) => t.text).join(" ")}"
+		aria-label=${this.i18n.t("reader.readingCurrent", { word: s.currentTokens.map((t) => t.text).join(" ") })}
       >
         <!-- Right fade mask -->
         <div class="absolute inset-y-0 right-0 w-6 md:w-20 z-10 pointer-events-none"
@@ -1240,9 +1242,11 @@ export class RsvpReader extends LitElement {
 		const h = Math.floor(seconds / 3600);
 		const m = Math.floor((seconds % 3600) / 60);
 		const sec = seconds % 60;
-		if (h > 0) return `${h}h ${m}m`;
-		if (m > 0) return sec > 0 ? `${m}m ${sec}s` : `${m}m`;
-		return `${sec}s`;
+		if (h > 0) return this.i18n.t("reader.hoursMinutes", { hours: h, minutes: m });
+		if (m > 0) return sec > 0
+			? this.i18n.t("reader.minutesSeconds", { minutes: m, seconds: sec })
+			: this.i18n.t("reader.minutes", { minutes: m });
+		return this.i18n.t("reader.seconds", { seconds: sec });
 	}
 
 	private renderControls(
@@ -1253,7 +1257,7 @@ export class RsvpReader extends LitElement {
 	) {
 		const step = this.settings.rewindStep ?? 5;
 		return html`
-      <div class="flex flex-wrap items-center justify-center gap-3 md:gap-4 max-w-2xl mx-auto w-full" role="toolbar" aria-label="Playback controls">
+      <div class="flex flex-wrap items-center justify-center gap-3 md:gap-4 max-w-2xl mx-auto w-full" role="toolbar" aria-label=${this.i18n.t("reader.playbackControls")}>
 
         <!-- Rewind N words -->
         <button
@@ -1262,8 +1266,8 @@ export class RsvpReader extends LitElement {
           @click=${() => {
 						this.engine.seekBy(-step);
 					}}
-          title="Back ${step} words (↑)"
-          aria-label="Back ${step} words"
+		  title=${this.i18n.t("reader.backWordsShortcut", { count: step })}
+		  aria-label=${this.i18n.t("reader.backWords", { count: step })}
         >
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1276,8 +1280,8 @@ export class RsvpReader extends LitElement {
           type="button"
           class="btn btn-primary btn-circle btn-lg min-h-[52px] min-w-[52px] touch-manipulation"
           @click=${this.togglePlay}
-          title="Play/Pause (Space)"
-          aria-label="${playing ? "Pause" : "Play"}"
+		  title=${this.i18n.t("reader.playPauseShortcut")}
+		  aria-label=${playing ? this.i18n.t("reader.pause") : this.i18n.t("reader.play")}
           aria-pressed="${playing}"
         >
           ${
@@ -1299,8 +1303,8 @@ export class RsvpReader extends LitElement {
           @click=${() => {
 						this.engine.seekBy(step);
 					}}
-          title="Skip ${step} words (↓)"
-          aria-label="Skip ${step} words"
+		  title=${this.i18n.t("reader.skipWordsShortcut", { count: step })}
+		  aria-label=${this.i18n.t("reader.skipWords", { count: step })}
         >
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1315,8 +1319,8 @@ export class RsvpReader extends LitElement {
           @click=${() => {
 						this.engine.stop();
 					}}
-          title="Restart (R)"
-          aria-label="Restart from beginning"
+		  title=${this.i18n.t("reader.restartShortcut")}
+		  aria-label=${this.i18n.t("reader.restartFromBeginning")}
         >
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1338,7 +1342,7 @@ export class RsvpReader extends LitElement {
           >−</button>
           <div class="flex flex-col items-center w-14 md:w-16">
             <span class="font-mono text-sm md:text-base font-medium leading-none">${wpm}</span>
-            <span class="text-xs text-base-content/60 leading-none mt-0.5">WPM</span>
+            <span class="text-xs text-base-content/60 leading-none mt-0.5">${this.i18n.t("reader.wpm")}</span>
           </div>
           <button
             type="button"
@@ -1351,8 +1355,8 @@ export class RsvpReader extends LitElement {
         ${
 					remainingSeconds > 0 && remainingLabel
 						? html`
-          <span class="text-sm text-base-content/55 font-mono" title="${remainingSeconds} seconds">
-            ${remainingLabel} left
+		  <span class="text-sm text-base-content/55 font-mono" title=${this.i18n.t("reader.secondsLong", { count: remainingSeconds })}>
+			${this.i18n.t("reader.timeLeft", { time: remainingLabel })}
           </span>
         `
 						: ""
@@ -1364,14 +1368,14 @@ export class RsvpReader extends LitElement {
 
 	private renderShortcutsModal() {
 		const shortcuts = [
-			["Space", "Play / Pause"],
-			["F", "Toggle focus mode (immersive while playing)"],
-			["Tap", "Pause — with focus mode on, shows controls again"],
-			["←  →", "Speed −/+ 25 WPM"],
-			["↑  ↓", "Back / Forward 5 words"],
-			["R", "Restart from beginning"],
-			["Esc", "Back to home"],
-			["?", "Toggle this overlay"],
+			[this.i18n.t("reader.keySpace"), this.i18n.t("reader.shortcutPlayPause")],
+			[this.i18n.t("reader.keyF"), this.i18n.t("reader.shortcutFocusMode")],
+			[this.i18n.t("reader.keyTap"), this.i18n.t("reader.shortcutTapPause")],
+			["←  →", this.i18n.t("reader.shortcutSpeed")],
+			["↑  ↓", this.i18n.t("reader.shortcutBackForward")],
+			[this.i18n.t("reader.keyR"), this.i18n.t("reader.restartFromBeginning")],
+			[this.i18n.t("reader.keyEsc"), this.i18n.t("reader.backToHome")],
+			["?", this.i18n.t("reader.shortcutToggleOverlay")],
 		];
 		return html`
       <div
@@ -1385,12 +1389,12 @@ export class RsvpReader extends LitElement {
           class="card bg-base-100 w-full max-w-sm shadow-xl"
           @click=${(e: Event) => e.stopPropagation()}
           role="dialog"
-          aria-label="Keyboard shortcuts"
+		  aria-label=${this.i18n.t("reader.keyboardShortcuts")}
         >
           <div class="card-body">
             <div class="flex items-center justify-between mb-2">
-              <h3 class="font-medium text-base-content">Keyboard Shortcuts</h3>
-              <button class="btn btn-ghost btn-xs btn-circle" aria-label="Close shortcuts" @click=${() => {
+			  <h3 class="font-medium text-base-content">${this.i18n.t("reader.keyboardShortcuts")}</h3>
+			  <button class="btn btn-ghost btn-xs btn-circle" aria-label=${this.i18n.t("reader.closeShortcuts")} @click=${() => {
 								this.showShortcuts = false;
 							}}>
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
