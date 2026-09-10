@@ -61,6 +61,11 @@ const en = {
 		sharedReadingTitle: "Shared Reading",
 		badReadLink: "That reading link could not be opened.",
 	},
+	profile: {
+		pageTitle: "Profile",
+		language: "Language",
+		languageHint: "Choose the language used by Speeedy.",
+	},
 	errors: {
 		genericTitle: "Something went wrong",
 		offline:

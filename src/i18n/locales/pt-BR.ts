@@ -42,6 +42,11 @@ export const ptBR: Messages = {
 		sharedReadingTitle: "Leitura compartilhada",
 		badReadLink: "Não foi possível abrir esse link de leitura.",
 	},
+	profile: {
+		pageTitle: "Perfil",
+		language: "Idioma",
+		languageHint: "Escolha o idioma usado pelo Speeedy.",
+	},
 	errors: {
 		genericTitle: "Algo deu errado",
 		offline:

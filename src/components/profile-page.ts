@@ -11,6 +11,13 @@ import {
 	Upload,
 	X,
 } from "lucide";
+import { LocaleController } from "../i18n/controller.js";
+import {
+	LOCALE_LABELS,
+	LOCALES,
+	type Locale,
+	setLocale,
+} from "../i18n/index.js";
 import type {
 	ParsedDocument,
 	SavedDocument,
@@ -46,6 +53,7 @@ import "./ui/stat-card.js";
 
 @customElement("profile-page")
 export class ProfilePage extends LitElement {
+	private i18n = new LocaleController(this);
 	protected override createRenderRoot() {
 		return this;
 	}
@@ -145,7 +153,7 @@ export class ProfilePage extends LitElement {
 	}
 
 	private renderNav() {
-		return html`<speeedy-page-nav label="Profile" back-route="app"></speeedy-page-nav>`;
+		return html`<speeedy-page-nav .label=${this.i18n.t("profile.pageTitle")} back-route="app"></speeedy-page-nav>`;
 	}
 
 	private renderSectionTabs() {
@@ -175,6 +183,18 @@ export class ProfilePage extends LitElement {
 		const hasAvatarImage = Boolean(p.avatarImage);
 		return html`
       <div class="flex flex-col gap-8 pb-8">
+		<div class="border border-base-200 rounded-xl p-5">
+			<label for="locale-select" class="font-semibold text-base-content">${this.i18n.t("profile.language")}</label>
+			<p class="text-ui-body text-ui-muted mb-3">${this.i18n.t("profile.languageHint")}</p>
+			<select id="locale-select" class="select select-bordered w-full" .value=${this.i18n.locale}
+				@change=${(event: Event) => {
+					const locale = (event.target as HTMLSelectElement).value as Locale;
+					setLocale(locale);
+					this.updateProfile({ locale });
+				}}>
+				${LOCALES.map((locale) => html`<option value=${locale}>${LOCALE_LABELS[locale]}</option>`)}
+			</select>
+		</div>
 
         <!-- Avatar & Name -->
         <div class="flex items-center gap-5 py-2">
