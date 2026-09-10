@@ -539,6 +539,17 @@ Um adulto lê, em média, cerca de duzentas e trinta e oito palavras por minuto.
 			"Você pode alterar essas configurações depois no painel de configurações.",
 		finish: "Finalizar",
 	},
+	donate: {
+		kofiLabel: "Ko-fi",
+		kofiDescription: "Pagamento único ou mensal, cartão e Apple/Google Pay",
+		stripeLabel: "Cartão via Stripe",
+		stripeDescription: "Pagamento direto com cartão, sem conta de terceiros",
+		ethereumLabel: "Ethereum",
+		usdtBnbLabel: "USDT (BNB Smart Chain - BEP20)",
+		usdcBnbLabel: "USDC (BNB Smart Chain - BEP20)",
+		solanaLabel: "Solana",
+		bitcoinLabel: "Bitcoin",
+	},
 	share: {
 		invalidLink: "Link de compartilhamento inválido ou expirado.",
 		goToSpeeedy: "Ir para o Speeedy",

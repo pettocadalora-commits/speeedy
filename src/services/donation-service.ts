@@ -1,4 +1,5 @@
 import { KOFI_URL, STRIPE_PAYMENT_LINK_URL } from "../config.js";
+import { t } from "../i18n/index.js";
 
 export type DonationLinkId = "kofi" | "stripe";
 
@@ -37,15 +38,23 @@ export interface Supporter {
 export const DONATION_LINKS: DonationLink[] = [
 	{
 		id: "kofi",
-		label: "Ko-fi",
-		description: "One-time or monthly, card & Apple/Google Pay",
+		get label() {
+			return t("donate.kofiLabel");
+		},
+		get description() {
+			return t("donate.kofiDescription");
+		},
 		url: KOFI_URL,
 		icon: "Coffee",
 	},
 	{
 		id: "stripe",
-		label: "Card via Stripe",
-		description: "Direct card checkout, no third-party account",
+		get label() {
+			return t("donate.stripeLabel");
+		},
+		get description() {
+			return t("donate.stripeDescription");
+		},
 		url: STRIPE_PAYMENT_LINK_URL,
 		icon: "CreditCard",
 	},
@@ -54,7 +63,9 @@ export const DONATION_LINKS: DonationLink[] = [
 export const DONATION_WALLETS: DonationWallet[] = [
 	{
 		chain: "ETH",
-		label: "Ethereum",
+		get label() {
+			return t("donate.ethereumLabel");
+		},
 		symbol: "ETH",
 		address: "0xbf76261d8ce29c511ed31ca63b4a82454e4e2a47",
 		explorerUrl:
@@ -62,7 +73,9 @@ export const DONATION_WALLETS: DonationWallet[] = [
 	},
 	{
 		chain: "BNB",
-		label: "USDT (BNB Smart Chain - BEP20)",
+		get label() {
+			return t("donate.usdtBnbLabel");
+		},
 		symbol: "USDT",
 		address: "0xbf76261d8ce29c511ed31ca63b4a82454e4e2a47",
 		explorerUrl:
@@ -70,7 +83,9 @@ export const DONATION_WALLETS: DonationWallet[] = [
 	},
 	{
 		chain: "BNB",
-		label: "USDC (BNB Smart Chain - BEP20)",
+		get label() {
+			return t("donate.usdcBnbLabel");
+		},
 		symbol: "USDC",
 		address: "0xbf76261d8ce29c511ed31ca63b4a82454e4e2a47",
 		explorerUrl:
@@ -78,7 +93,9 @@ export const DONATION_WALLETS: DonationWallet[] = [
 	},
 	{
 		chain: "SOL",
-		label: "Solana",
+		get label() {
+			return t("donate.solanaLabel");
+		},
 		symbol: "SOL",
 		address: "FxdrWE9QLy4V1rjbcAmqnhNafuUFqsDC2ytbAKXjRimU",
 		explorerUrl:
@@ -86,7 +103,9 @@ export const DONATION_WALLETS: DonationWallet[] = [
 	},
 	{
 		chain: "BTC",
-		label: "Bitcoin",
+		get label() {
+			return t("donate.bitcoinLabel");
+		},
 		symbol: "BTC",
 		address: "1Lwgn5bYNMHm1x3ACx5oLPk1GEnLVZhAi7",
 		explorerUrl:

@@ -551,6 +551,17 @@ The average adult reads at around two hundred and thirty-eight words per minute.
 			"You can always change these settings later in the settings panel.",
 		finish: "Finish",
 	},
+	donate: {
+		kofiLabel: "Ko-fi",
+		kofiDescription: "One-time or monthly, card & Apple/Google Pay",
+		stripeLabel: "Card via Stripe",
+		stripeDescription: "Direct card checkout, no third-party account",
+		ethereumLabel: "Ethereum",
+		usdtBnbLabel: "USDT (BNB Smart Chain - BEP20)",
+		usdcBnbLabel: "USDC (BNB Smart Chain - BEP20)",
+		solanaLabel: "Solana",
+		bitcoinLabel: "Bitcoin",
+	},
 	share: {
 		invalidLink: "Invalid or expired share link.",
 		goToSpeeedy: "Go to Speeedy",
