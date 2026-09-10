@@ -22,11 +22,13 @@ import "./share-view.ts";
 import "./stats-dashboard.ts";
 import "./toast-container.ts";
 import "./onboarding-modal.ts";
+import { LocaleController } from "../i18n/controller.js";
 import { trackPageview } from "../utils/analytics.js";
 import { showToast } from "../utils/events.js";
 
 @customElement("app-shell")
 export class AppShell extends LitElement {
+	private i18n = new LocaleController(this);
 	protected override createRenderRoot() {
 		return this;
 	}
@@ -143,10 +145,14 @@ export class AppShell extends LitElement {
 				for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
 				const text = new TextDecoder().decode(bytes);
 
-				this.pendingDoc = createDocFromText(text, "Shared Reading");
+				this.pendingDoc = createDocFromText(
+					text,
+					this.i18n.t("shell.sharedReadingTitle"),
+				);
 				this.route = "reader";
 			} catch (e) {
 				console.error("Failed to parse read link:", e);
+				showToast(this.i18n.t("shell.badReadLink"), "error");
 				this.route = "landing";
 			}
 		} else if (hash === "app") {
@@ -201,9 +207,7 @@ export class AppShell extends LitElement {
 		const isInternal =
 			e.reason instanceof TypeError || /cannot read propert/i.test(msg);
 		showToast(
-			isInternal
-				? "Something went wrong. Refresh the page — if it keeps happening, send us feedback."
-				: msg,
+			isInternal ? this.i18n.t("shell.unexpectedError") : msg,
 			"error",
 		);
 	};
