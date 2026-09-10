@@ -4,6 +4,7 @@ import "./ui/page-nav.js";
 import "./learn/learn-saccade-demo.js";
 import "./learn/learn-wpm-chart.js";
 import "./orp-demo.js";
+import { LocaleController } from "../i18n/controller.js";
 import {
 	initDataReveal,
 	initTipReveal,
@@ -20,6 +21,7 @@ interface TipItem {
 
 @customElement("learn-page")
 export class LearnPage extends LitElement {
+	private i18n = new LocaleController(this);
 	protected override createRenderRoot() {
 		return this;
 	}
@@ -27,33 +29,33 @@ export class LearnPage extends LitElement {
 	@state() private scrollProgress = 0;
 	@state() private tips: TipItem[] = [
 		{
-			title: "Start slow, ramp up",
-			body: "Set the reader to a speed that feels slightly uncomfortable, not painful. Your brain adapts in a few sessions. Starting too fast leads to frustration and poor comprehension. Speeedy's speed ramp starts slow and builds automatically.",
+			title: this.i18n.t("learn.tipStartSlowTitle"),
+			body: this.i18n.t("learn.tipStartSlowBody"),
 			open: false,
 		},
 		{
-			title: "Use punctuation pauses",
-			body: "Turn on sentence and comma pauses. That gives working memory the consolidation window it needs, especially for complex or technical text.",
+			title: this.i18n.t("learn.tipPunctuationTitle"),
+			body: this.i18n.t("learn.tipPunctuationBody"),
 			open: false,
 		},
 		{
-			title: "Take a reading speed test first",
-			body: "Before guessing your WPM, take a proper reading test. Read a passage at your natural pace, then answer 10 comprehension questions. Your actual baseline is often different from what you expect.",
+			title: this.i18n.t("learn.tipTestTitle"),
+			body: this.i18n.t("learn.tipTestBody"),
 			open: false,
 		},
 		{
-			title: "Read every day",
-			body: "Short daily sessions work better than occasional long ones. 15–20 minutes a day with RSVP builds the pattern recognition your brain uses to process words faster.",
+			title: this.i18n.t("learn.tipDailyTitle"),
+			body: this.i18n.t("learn.tipDailyBody"),
 			open: false,
 		},
 		{
-			title: "Use peripheral context for difficult text",
-			body: "Show 1–3 context words before and after the current word, dimmed. For complex or technical material, this keeps sentence flow and reduces the load of losing your place.",
+			title: this.i18n.t("learn.tipContextTitle"),
+			body: this.i18n.t("learn.tipContextBody"),
 			open: false,
 		},
 		{
-			title: "Use RSVP for comfort, not just speed",
-			body: "If reading feels tiring or hard to track, try RSVP at a moderate pace, below 300 WPM. Some readers find the fixed focal point easier to sustain than scanning across lines, regardless of speed.",
+			title: this.i18n.t("learn.tipComfortTitle"),
+			body: this.i18n.t("learn.tipComfortBody"),
 			open: false,
 		},
 	];
@@ -146,37 +148,34 @@ export class LearnPage extends LitElement {
       <div class="learn-reading-surface">
 
         <!-- Nav -->
-        <speeedy-page-nav label="How reading works" back-href="#/" sticky></speeedy-page-nav>
+        <speeedy-page-nav label=${this.i18n.t("learn.navLabel")} back-href="#/" sticky></speeedy-page-nav>
 
         <!-- Article -->
         <article class="max-w-2xl mx-auto px-6 py-14" @scroll=${this._scrollHandler}>
 
           <!-- Header -->
-          <p class="text-ui-body tracking-[0.35em] uppercase text-base-content mb-4 font-semibold" data-reveal>Science</p>
+          <p class="text-ui-body tracking-[0.35em] uppercase text-base-content mb-4 font-semibold" data-reveal>${this.i18n.t("learn.science")}</p>
           <h1 class="text-ui-hero font-semibold text-base-content leading-tight mb-5" data-reveal>
-            What is speed reading?<br/>
-            <span class="font-semibold">RSVP, ORP, and the mechanics of reading faster.</span>
+            ${this.i18n.t("learn.heroTitle")}<br/>
+            <span class="font-semibold">${this.i18n.t("learn.heroSubtitle")}</span>
           </h1>
           <p class="text-ui-body text-ui-muted leading-relaxed mb-14" data-reveal>
-            The average adult reads at about 238 WPM. With RSVP practice, many readers reach 400 or more WPM.
-            Comprehension drops for most people above about 450 WPM. Here is how it works and what the research shows.
+            ${this.i18n.t("learn.intro")}
           </p>
 
           <!-- Animated stats -->
           <div class="grid grid-cols-3 border border-base-300/60 rounded-2xl overflow-hidden mb-3" data-reveal>
-            ${this.statCell("238", "avg adult WPM", false)}
-            ${this.statCell("400+", "WPM with RSVP", true)}
-            ${this.statCell("~10%", "lost to eye movement", false)}
+            ${this.statCell("238", this.i18n.t("learn.statAdult"), false)}
+            ${this.statCell("400+", this.i18n.t("learn.statRsvp"), true)}
+            ${this.statCell("~10%", this.i18n.t("learn.statEyeMovement"), false)}
           </div>
-          <p class="text-ui-body text-ui-muted mb-14" data-reveal>Brysbaert (2019) · Rayner et al. (2016) · Masson (1983)</p>
+          <p class="text-ui-body text-ui-muted mb-14" data-reveal>${this.i18n.t("learn.sourcesIntro")}</p>
 
           <h2 class="text-ui-title font-semibold text-base-content mb-4" data-reveal data-decode="The real bottleneck is your eyes, not your brain">
-            The real bottleneck is your eyes, not your brain
+            ${this.i18n.t("learn.eyesTitle")}
           </h2>
           <p class="text-ui-body text-ui-muted leading-[1.9] mb-5" data-reveal>
-            When you read a line of text, your eyes don't glide smoothly. They jump 3–4 times per line in rapid bursts called
-            <em>saccades</em>. During each saccade you read nothing — it's pure motor overhead. Between saccades you fixate
-            for roughly 200–250ms per word group, and sometimes regress (jump backward) to re-read.
+            ${this.i18n.t("learn.eyesBeforeSaccades")} <em>${this.i18n.t("learn.saccades")}</em>${this.i18n.t("learn.eyesAfterSaccades")}
           </p>
 
           <!-- Saccade visualization -->
@@ -185,121 +184,96 @@ export class LearnPage extends LitElement {
           </div>
 
           <p class="text-ui-body text-ui-muted leading-[1.9] mb-2" data-reveal>
-            The brain itself can process language significantly faster than 238 WPM. The bottleneck is the eye movement
-            pipeline, not cognition. Speed reading techniques target that pipeline.
+            ${this.i18n.t("learn.brainSpeed")}
           </p>
-          <p class="text-ui-body text-ui-muted mb-14" data-reveal>Rayner, K. (1998). Eye movements in reading and information processing. Psychological Bulletin, 124(3), 372–422.</p>
+          <p class="text-ui-body text-ui-muted mb-14" data-reveal>${this.i18n.t("learn.sourceRayner")}</p>
 
           <h2 class="text-ui-title font-semibold text-base-content mb-4" data-reveal data-decode="What is RSVP?">
-            What is RSVP?
+            ${this.i18n.t("learn.rsvpTitle")}
           </h2>
           <p class="text-ui-body text-ui-muted leading-[1.9] mb-4" data-reveal>
-            <strong class="font-semibold text-base-content">RSVP</strong> — Rapid Serial Visual Presentation — eliminates saccades entirely.
-            Instead of your eyes scanning across a page, words appear one at a time in a single fixed position on screen.
-            Your eyes stay still; the words move to you.
+            <strong class="font-semibold text-base-content">RSVP</strong>${this.i18n.t("learn.rsvpExplanation")}
           </p>
           <div class="rounded-xl border-l-4 border-primary bg-primary/5 px-5 py-4 mb-4" data-reveal>
             <p class="text-ui-body text-base-content leading-[1.85]">
-              One word. One fixed point. No eye movement. Studies show RSVP readers can reach 300–500+ WPM with
-              comprehension similar to normal reading. Above about 450 WPM, comprehension drops for most readers.
-              Good retention at high speeds takes practice and pausing.
+              ${this.i18n.t("learn.rsvpCallout")}
             </p>
           </div>
           <p class="text-ui-body text-ui-muted leading-[1.9] mb-2" data-reveal>
-            RSVP works well for <strong class="font-semibold text-base-content">linear text</strong> like articles, books,
-            and reports. It's less suited for reference material where you need to jump around or skim headings.
+            ${this.i18n.t("learn.rsvpWorksBefore")}<strong class="font-semibold text-base-content">${this.i18n.t("learn.linearText")}</strong>${this.i18n.t("learn.rsvpWorksAfter")}
           </p>
-          <p class="text-ui-body text-ui-muted mb-14" data-reveal>Masson, M. E. J. (1983). Conceptual processing of text during skimming and rapid sequential reading. Memory &amp; Cognition, 11(3), 262–274.</p>
+          <p class="text-ui-body text-ui-muted mb-14" data-reveal>${this.i18n.t("learn.sourceMasson")}</p>
 
           <h2 class="text-ui-title font-semibold text-base-content mb-4" data-reveal data-decode="RSVP beyond speed">
-            RSVP beyond speed
+            ${this.i18n.t("learn.beyondTitle")}
           </h2>
           <p class="text-ui-body text-ui-muted leading-[1.9] mb-4" data-reveal>
-            Speed is usually how RSVP gets marketed, but it's not always the main benefit. For readers with dyslexia,
-            ADHD, or visual stress conditions like Irlen syndrome, RSVP removes the mechanical burden of tracking lines.
-            Your eyes don't have to find where the next word is.
+            ${this.i18n.t("learn.beyondIntro")}
           </p>
           <div class="rounded-xl border-l-4 border-primary bg-primary/5 px-5 py-4 mb-4" data-reveal>
             <p class="text-ui-body text-base-content leading-[1.85]">
-              In a small study, a reader with dyslexia completed passages at 3× their normal speed with the same comprehension
-              on a single RSVP pass. Another reader said RSVP felt less exhausting than regular reading, even when they needed
-              multiple passes to understand the same amount. Comfort and comprehension are different measures. Both matter.
+              ${this.i18n.t("learn.beyondCallout")}
             </p>
           </div>
           <p class="text-ui-body text-ui-muted leading-[1.9] mb-14" data-reveal>
-            Speeedy includes OpenDyslexic font support, configurable letter spacing, tinted Irlen overlays (visible in
-            light and dark themes), and full play/pause control so you can stop whenever you need to without losing your place.
+            ${this.i18n.t("learn.accessibility")}
           </p>
 
           <h2 class="text-ui-title font-semibold text-base-content mb-4" data-reveal data-decode="The Optimal Recognition Point (ORP)">
-            The Optimal Recognition Point (ORP)
+            ${this.i18n.t("learn.orpTitle")}
           </h2>
           <p class="text-ui-body text-ui-muted leading-[1.9] mb-6" data-reveal>
-            O'Regan and Jacobs (1992) showed that word recognition is fastest when your eye lands on a specific letter —
-            not the first letter or the middle. They called this the <strong class="font-semibold text-base-content">Optimal Viewing Position</strong>,
-            typically 1–2 letters left of center. In speed reading apps it is called the
-            <strong class="font-semibold text-base-content">Optimal Recognition Point (ORP)</strong>.
-            Speeedy lines up every word on this letter so your brain processes each word with less effort.
+            ${this.i18n.t("learn.orpBeforeOvp")} <strong class="font-semibold text-base-content">${this.i18n.t("learn.optimalViewingPosition")}</strong>${this.i18n.t("learn.orpBetween")} <strong class="font-semibold text-base-content">${this.i18n.t("learn.optimalRecognitionPoint")}</strong>${this.i18n.t("learn.orpAfter")}
           </p>
 
           <div class="mb-3" data-reveal>
-            <speeedy-orp-demo tone="surface" hint="hover any word to see its ORP"></speeedy-orp-demo>
+            <speeedy-orp-demo tone="surface" hint=${this.i18n.t("learn.orpHint")}></speeedy-orp-demo>
           </div>
-          <p class="text-ui-body text-ui-muted mb-14" data-reveal>O'Regan, J. K., &amp; Jacobs, A. M. (1992). Optimal viewing position effect in word recognition. J. Experimental Psychology.</p>
+          <p class="text-ui-body text-ui-muted mb-14" data-reveal>${this.i18n.t("learn.sourceORegan")}</p>
 
           <h2 class="text-ui-title font-semibold text-base-content mb-4" data-reveal data-decode="What is a normal reading speed?">
-            What is a normal reading speed?
+            ${this.i18n.t("learn.normalSpeedTitle")}
           </h2>
           <div class="mb-4" data-reveal>
             <learn-wpm-chart></learn-wpm-chart>
           </div>
           <p class="text-ui-body text-ui-muted leading-[1.9] mb-14" data-reveal>
-            Your baseline WPM matters more than the comparison. The goal is to comfortably absorb more in less time, not to hit an arbitrary number.
+            ${this.i18n.t("learn.baseline")}
           </p>
 
           <h2 class="text-ui-title font-semibold text-base-content mb-4" data-reveal data-decode="Does speed reading hurt comprehension?">
-            Does speed reading hurt comprehension?
+            ${this.i18n.t("learn.comprehensionTitle")}
           </h2>
           <p class="text-ui-body text-ui-muted leading-[1.9] mb-4" data-reveal>
-            The honest answer is: it depends on speed. Rayner et al. (2016) found that
-            doubling reading speed from about 250 to 500+ WPM reliably hurts comprehension for most readers.
-            Pure skimming techniques that claim 1000+ WPM drop comprehension to around 50%.
-            <strong class="font-semibold text-base-content">RSVP with pauses and moderate speeds</strong> behaves differently.
+            ${this.i18n.t("learn.comprehensionBefore")} <strong class="font-semibold text-base-content">${this.i18n.t("learn.rsvpModerate")}</strong>${this.i18n.t("learn.comprehensionAfter")}
           </p>
           <div class="rounded-xl border-l-4 border-primary bg-primary/5 px-5 py-4 mb-4" data-reveal>
             <p class="text-ui-body text-base-content leading-[1.85]">
-              Just &amp; Carpenter (1987) showed that comprehension depends on working memory consolidation at clause
-              boundaries. RSVP with automatic pauses at commas and full stops gives you that window. Most readers
-              keep good comprehension up to about 400–450 WPM with pausing. Beyond that, expect some trade-off.
+              ${this.i18n.t("learn.comprehensionCallout")}
             </p>
           </div>
           <p class="text-ui-body text-ui-muted leading-[1.9] mb-2" data-reveal>
-            A note on subvocalization: the inner voice is often described as a habit to eliminate. Research suggests it's actually
-            useful for complex text, helping you hold syntax in working memory. Don't try to suppress it on difficult material.
-            Let the speed ramp do its job instead.
+            ${this.i18n.t("learn.subvocalization")}
           </p>
-          <p class="text-ui-body text-ui-muted mb-14" data-reveal>Just &amp; Carpenter (1987), The Psychology of Reading and Language Comprehension. · Rayner et al. (2016), Psychological Science in the Public Interest.</p>
+          <p class="text-ui-body text-ui-muted mb-14" data-reveal>${this.i18n.t("learn.sourcesComprehension")}</p>
 
           <h2 class="text-ui-title font-semibold text-base-content mb-4" data-reveal data-decode="What is bionic reading?">
-            What is bionic reading?
+            ${this.i18n.t("learn.bionicTitle")}
           </h2>
           <p class="text-ui-body text-ui-muted leading-[1.9] mb-4" data-reveal>
-            <strong class="font-semibold text-base-content">Bionic reading</strong> bolds the first letters of each word.
-            The theory is that your brain uses the bolded anchors to predict and fill in the rest of the word faster.
+            <strong class="font-semibold text-base-content">${this.i18n.t("learn.bionicReading")}</strong>${this.i18n.t("learn.bionicExplanation")}
           </p>
           <div class="rounded-xl border border-base-300/60 bg-base-200/30 px-5 py-4 mb-4" data-reveal>
             <p class="text-ui-body text-ui-muted leading-[1.85]">
-              <strong class="font-semibold text-base-content">Note:</strong> Current peer-reviewed research has not found
-              a measurable benefit to reading speed or comprehension from bionic formatting for general readers
-              (Acta Psychologica, 2024). Some readers find it helpful at high speeds. Try it and see.
+              <strong class="font-semibold text-base-content">${this.i18n.t("learn.note")}</strong> ${this.i18n.t("learn.bionicNote")}
             </p>
           </div>
           <p class="text-ui-body text-ui-muted leading-[1.9] mb-14" data-reveal>
-            In Speeedy you can use bionic mode together with RSVP and ORP. The feature is there as an option, not a promise.
+            ${this.i18n.t("learn.bionicOption")}
           </p>
 
           <h2 class="text-ui-title font-semibold text-base-content mb-6" data-reveal data-decode="How to improve your reading speed">
-            How to improve your reading speed
+            ${this.i18n.t("learn.tipsTitle")}
           </h2>
           <div class="space-y-0 divide-y divide-base-300/50 mb-14" data-reveal>
             ${this.tips.map(
@@ -333,14 +307,14 @@ export class LearnPage extends LitElement {
           <!-- CTA -->
           <div class="border border-primary/20 rounded-2xl p-8 text-center bg-primary/3" data-reveal
             style="box-shadow: 0 0 40px color-mix(in oklab, var(--color-primary) 8%, transparent);">
-            <p class="text-ui-body tracking-[0.35em] uppercase text-base-content mb-4 font-semibold">Ready to start?</p>
-            <h2 class="text-ui-hero font-semibold text-base-content mb-3">Find your reading speed</h2>
+            <p class="text-ui-body tracking-[0.35em] uppercase text-base-content mb-4 font-semibold">${this.i18n.t("learn.ready")}</p>
+            <h2 class="text-ui-hero font-semibold text-base-content mb-3">${this.i18n.t("learn.findSpeed")}</h2>
             <p class="text-ui-body text-ui-muted leading-relaxed mb-7 max-w-xs mx-auto">
-              Read at your own pace, answer 10 comprehension questions, and get your WPM and score saved to your profile. Takes about 3 minutes.
+              ${this.i18n.t("learn.ctaDescription")}
             </p>
             <div class="flex flex-col sm:flex-row gap-3 justify-center">
-              <a href="#/benchmark" class="btn btn-primary rounded-full px-8">Take the reading test</a>
-              <a href="#/app" class="btn btn-ghost text-ui-muted hover:text-base-content">Open app</a>
+              <a href="#/benchmark" class="btn btn-primary rounded-full px-8">${this.i18n.t("learn.takeTest")}</a>
+              <a href="#/app" class="btn btn-ghost text-ui-muted hover:text-base-content">${this.i18n.t("learn.openApp")}</a>
             </div>
           </div>
 

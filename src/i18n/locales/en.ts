@@ -531,6 +531,106 @@ The average adult reads at around two hundred and thirty-eight words per minute.
 		eyeRestReminder: "Eye Rest Reminder",
 		eyeRestInstruction: "Look 20 feet away for 20 seconds.",
 	},
+	learn: {
+		navLabel: "How reading works",
+		science: "Science",
+		heroTitle: "What is speed reading?",
+		heroSubtitle: "RSVP, ORP, and the mechanics of reading faster.",
+		intro:
+			"The average adult reads at about 238 WPM. With RSVP practice, many readers reach 400 or more WPM. Comprehension drops for most people above about 450 WPM. Here is how it works and what the research shows.",
+		statAdult: "avg adult WPM",
+		statRsvp: "WPM with RSVP",
+		statEyeMovement: "lost to eye movement",
+		sourcesIntro: "Brysbaert (2019) · Rayner et al. (2016) · Masson (1983)",
+		eyesTitle: "The real bottleneck is your eyes, not your brain",
+		eyesBeforeSaccades:
+			"When you read a line of text, your eyes don't glide smoothly. They jump 3–4 times per line in rapid bursts called",
+		saccades: "saccades",
+		eyesAfterSaccades:
+			". During each saccade you read nothing — it's pure motor overhead. Between saccades you fixate for roughly 200–250ms per word group, and sometimes regress (jump backward) to re-read.",
+		brainSpeed:
+			"The brain itself can process language significantly faster than 238 WPM. The bottleneck is the eye movement pipeline, not cognition. Speed reading techniques target that pipeline.",
+		sourceRayner:
+			"Rayner, K. (1998). Eye movements in reading and information processing. Psychological Bulletin, 124(3), 372–422.",
+		rsvpTitle: "What is RSVP?",
+		rsvpExplanation:
+			" — Rapid Serial Visual Presentation — eliminates saccades entirely. Instead of your eyes scanning across a page, words appear one at a time in a single fixed position on screen. Your eyes stay still; the words move to you.",
+		rsvpCallout:
+			"One word. One fixed point. No eye movement. Studies show RSVP readers can reach 300–500+ WPM with comprehension similar to normal reading. Above about 450 WPM, comprehension drops for most readers. Good retention at high speeds takes practice and pausing.",
+		rsvpWorksBefore: "RSVP works well for ",
+		linearText: "linear text",
+		rsvpWorksAfter:
+			" like articles, books, and reports. It's less suited for reference material where you need to jump around or skim headings.",
+		sourceMasson:
+			"Masson, M. E. J. (1983). Conceptual processing of text during skimming and rapid sequential reading. Memory & Cognition, 11(3), 262–274.",
+		beyondTitle: "RSVP beyond speed",
+		beyondIntro:
+			"Speed is usually how RSVP gets marketed, but it's not always the main benefit. For readers with dyslexia, ADHD, or visual stress conditions like Irlen syndrome, RSVP removes the mechanical burden of tracking lines. Your eyes don't have to find where the next word is.",
+		beyondCallout:
+			"In a small study, a reader with dyslexia completed passages at 3× their normal speed with the same comprehension on a single RSVP pass. Another reader said RSVP felt less exhausting than regular reading, even when they needed multiple passes to understand the same amount. Comfort and comprehension are different measures. Both matter.",
+		accessibility:
+			"Speeedy includes OpenDyslexic font support, configurable letter spacing, tinted Irlen overlays (visible in light and dark themes), and full play/pause control so you can stop whenever you need to without losing your place.",
+		orpTitle: "The Optimal Recognition Point (ORP)",
+		orpBeforeOvp:
+			"O'Regan and Jacobs (1992) showed that word recognition is fastest when your eye lands on a specific letter — not the first letter or the middle. They called this the",
+		optimalViewingPosition: "Optimal Viewing Position",
+		orpBetween:
+			", typically 1–2 letters left of center. In speed reading apps it is called the",
+		optimalRecognitionPoint: "Optimal Recognition Point (ORP)",
+		orpAfter:
+			". Speeedy lines up every word on this letter so your brain processes each word with less effort.",
+		orpHint: "hover any word to see its ORP",
+		sourceORegan:
+			"O'Regan, J. K., & Jacobs, A. M. (1992). Optimal viewing position effect in word recognition. J. Experimental Psychology.",
+		normalSpeedTitle: "What is a normal reading speed?",
+		baseline:
+			"Your baseline WPM matters more than the comparison. The goal is to comfortably absorb more in less time, not to hit an arbitrary number.",
+		comprehensionTitle: "Does speed reading hurt comprehension?",
+		comprehensionBefore:
+			"The honest answer is: it depends on speed. Rayner et al. (2016) found that doubling reading speed from about 250 to 500+ WPM reliably hurts comprehension for most readers. Pure skimming techniques that claim 1000+ WPM drop comprehension to around 50%.",
+		rsvpModerate: "RSVP with pauses and moderate speeds",
+		comprehensionAfter: " behaves differently.",
+		comprehensionCallout:
+			"Just & Carpenter (1987) showed that comprehension depends on working memory consolidation at clause boundaries. RSVP with automatic pauses at commas and full stops gives you that window. Most readers keep good comprehension up to about 400–450 WPM with pausing. Beyond that, expect some trade-off.",
+		subvocalization:
+			"A note on subvocalization: the inner voice is often described as a habit to eliminate. Research suggests it's actually useful for complex text, helping you hold syntax in working memory. Don't try to suppress it on difficult material. Let the speed ramp do its job instead.",
+		sourcesComprehension:
+			"Just & Carpenter (1987), The Psychology of Reading and Language Comprehension. · Rayner et al. (2016), Psychological Science in the Public Interest.",
+		bionicTitle: "What is bionic reading?",
+		bionicReading: "Bionic reading",
+		bionicExplanation:
+			" bolds the first letters of each word. The theory is that your brain uses the bolded anchors to predict and fill in the rest of the word faster.",
+		note: "Note:",
+		bionicNote:
+			"Current peer-reviewed research has not found a measurable benefit to reading speed or comprehension from bionic formatting for general readers (Acta Psychologica, 2024). Some readers find it helpful at high speeds. Try it and see.",
+		bionicOption:
+			"In Speeedy you can use bionic mode together with RSVP and ORP. The feature is there as an option, not a promise.",
+		tipsTitle: "How to improve your reading speed",
+		tipStartSlowTitle: "Start slow, ramp up",
+		tipStartSlowBody:
+			"Set the reader to a speed that feels slightly uncomfortable, not painful. Your brain adapts in a few sessions. Starting too fast leads to frustration and poor comprehension. Speeedy's speed ramp starts slow and builds automatically.",
+		tipPunctuationTitle: "Use punctuation pauses",
+		tipPunctuationBody:
+			"Turn on sentence and comma pauses. That gives working memory the consolidation window it needs, especially for complex or technical text.",
+		tipTestTitle: "Take a reading speed test first",
+		tipTestBody:
+			"Before guessing your WPM, take a proper reading test. Read a passage at your natural pace, then answer 10 comprehension questions. Your actual baseline is often different from what you expect.",
+		tipDailyTitle: "Read every day",
+		tipDailyBody:
+			"Short daily sessions work better than occasional long ones. 15–20 minutes a day with RSVP builds the pattern recognition your brain uses to process words faster.",
+		tipContextTitle: "Use peripheral context for difficult text",
+		tipContextBody:
+			"Show 1–3 context words before and after the current word, dimmed. For complex or technical material, this keeps sentence flow and reduces the load of losing your place.",
+		tipComfortTitle: "Use RSVP for comfort, not just speed",
+		tipComfortBody:
+			"If reading feels tiring or hard to track, try RSVP at a moderate pace, below 300 WPM. Some readers find the fixed focal point easier to sustain than scanning across lines, regardless of speed.",
+		ready: "Ready to start?",
+		findSpeed: "Find your reading speed",
+		ctaDescription:
+			"Read at your own pace, answer 10 comprehension questions, and get your WPM and score saved to your profile. Takes about 3 minutes.",
+		takeTest: "Take the reading test",
+		openApp: "Open app",
+	},
 	landing: {
 		speeedy: "speeedy",
 		github: "GitHub",

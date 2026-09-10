@@ -519,6 +519,106 @@ Um adulto lê, em média, cerca de duzentas e trinta e oito palavras por minuto.
 		eyeRestInstruction:
 			"Olhe para algo a 6 metros de distância por 20 segundos.",
 	},
+	learn: {
+		navLabel: "Como a leitura funciona",
+		science: "Ciência",
+		heroTitle: "O que é leitura dinâmica?",
+		heroSubtitle: "RSVP, ORP e os mecanismos para ler mais rápido.",
+		intro:
+			"Um adulto lê, em média, cerca de 238 WPM. Com a prática de RSVP, muitos leitores chegam a 400 WPM ou mais. A compreensão cai para a maioria das pessoas acima de cerca de 450 WPM. Veja como isso funciona e o que as pesquisas mostram.",
+		statAdult: "WPM médio de um adulto",
+		statRsvp: "WPM com RSVP",
+		statEyeMovement: "perdidos com o movimento dos olhos",
+		sourcesIntro: "Brysbaert (2019) · Rayner et al. (2016) · Masson (1983)",
+		eyesTitle: "O verdadeiro gargalo são seus olhos, não seu cérebro",
+		eyesBeforeSaccades:
+			"Quando você lê uma linha de texto, seus olhos não deslizam suavemente. Eles saltam de 3 a 4 vezes por linha em movimentos rápidos chamados",
+		saccades: "sacadas",
+		eyesAfterSaccades:
+			". Durante cada sacada, você não lê nada — é puro esforço motor. Entre as sacadas, você fixa o olhar por cerca de 200–250 ms em cada grupo de palavras e, às vezes, regride (salta para trás) para reler.",
+		brainSpeed:
+			"O próprio cérebro consegue processar a linguagem significativamente mais rápido do que 238 WPM. O gargalo está no processo de movimento dos olhos, não na cognição. As técnicas de leitura dinâmica atuam nesse processo.",
+		sourceRayner:
+			"Rayner, K. (1998). Movimentos oculares na leitura e no processamento de informações. Psychological Bulletin, 124(3), 372–422.",
+		rsvpTitle: "O que é RSVP?",
+		rsvpExplanation:
+			" — Apresentação Visual Serial Rápida — elimina completamente as sacadas. Em vez de seus olhos percorrerem uma página, as palavras aparecem uma de cada vez em uma única posição fixa na tela. Seus olhos ficam parados; as palavras vêm até você.",
+		rsvpCallout:
+			"Uma palavra. Um ponto fixo. Nenhum movimento dos olhos. Estudos mostram que leitores com RSVP podem alcançar 300–500+ WPM com compreensão semelhante à da leitura normal. Acima de cerca de 450 WPM, a compreensão cai para a maioria dos leitores. Manter uma boa retenção em altas velocidades exige prática e pausas.",
+		rsvpWorksBefore: "O RSVP funciona bem para ",
+		linearText: "textos lineares",
+		rsvpWorksAfter:
+			", como artigos, livros e relatórios. Ele é menos adequado para materiais de consulta nos quais você precisa saltar entre trechos ou percorrer títulos rapidamente.",
+		sourceMasson:
+			"Masson, M. E. J. (1983). Processamento conceitual de texto durante leitura superficial e leitura sequencial rápida. Memory & Cognition, 11(3), 262–274.",
+		beyondTitle: "RSVP além da velocidade",
+		beyondIntro:
+			"A velocidade costuma ser o principal argumento de venda do RSVP, mas nem sempre é seu maior benefício. Para leitores com dislexia, TDAH ou condições de estresse visual, como a síndrome de Irlen, o RSVP elimina o esforço mecânico de acompanhar as linhas. Seus olhos não precisam localizar a próxima palavra.",
+		beyondCallout:
+			"Em um pequeno estudo, uma pessoa com dislexia concluiu passagens a uma velocidade 3× maior que a normal, com a mesma compreensão, em uma única leitura com RSVP. Outra pessoa disse que o RSVP era menos cansativo do que a leitura comum, mesmo quando precisava de várias leituras para compreender a mesma quantidade. Conforto e compreensão são medidas diferentes. Ambos importam.",
+		accessibility:
+			"O Speeedy oferece suporte à fonte OpenDyslexic, espaçamento entre letras configurável, sobreposições Irlen coloridas (visíveis nos temas claro e escuro) e controle total de reprodução e pausa para você parar quando precisar sem perder sua posição.",
+		orpTitle: "O Ponto de Reconhecimento Ideal (ORP)",
+		orpBeforeOvp:
+			"O'Regan e Jacobs (1992) mostraram que o reconhecimento de palavras é mais rápido quando seus olhos pousam em uma letra específica — não na primeira letra nem no meio. Eles chamaram isso de",
+		optimalViewingPosition: "Posição Ideal de Visualização",
+		orpBetween:
+			", geralmente 1–2 letras à esquerda do centro. Em aplicativos de leitura dinâmica, isso é chamado de",
+		optimalRecognitionPoint: "Ponto de Reconhecimento Ideal (ORP)",
+		orpAfter:
+			". O Speeedy alinha todas as palavras nessa letra para que seu cérebro processe cada uma com menos esforço.",
+		orpHint: "passe o cursor sobre uma palavra para ver seu ORP",
+		sourceORegan:
+			"O'Regan, J. K., & Jacobs, A. M. (1992). Efeito da posição ideal de visualização no reconhecimento de palavras. J. Experimental Psychology.",
+		normalSpeedTitle: "Qual é uma velocidade normal de leitura?",
+		baseline:
+			"Seu WPM inicial importa mais do que a comparação. O objetivo é absorver mais conteúdo confortavelmente em menos tempo, não atingir um número arbitrário.",
+		comprehensionTitle: "A leitura dinâmica prejudica a compreensão?",
+		comprehensionBefore:
+			"A resposta sincera é: depende da velocidade. Rayner et al. (2016) constataram que dobrar a velocidade de leitura de cerca de 250 para mais de 500 WPM prejudica a compreensão da maioria dos leitores. Técnicas de leitura superficial que prometem mais de 1000 WPM reduzem a compreensão para cerca de 50%.",
+		rsvpModerate: "O RSVP com pausas e velocidades moderadas",
+		comprehensionAfter: " se comporta de outra forma.",
+		comprehensionCallout:
+			"Just & Carpenter (1987) mostraram que a compreensão depende da consolidação das informações pela memória de trabalho nos limites das orações. O RSVP com pausas automáticas em vírgulas e pontos oferece essa janela. A maioria dos leitores mantém uma boa compreensão até cerca de 400–450 WPM com pausas. Acima disso, espere alguma perda.",
+		subvocalization:
+			"Uma observação sobre a subvocalização: a voz interior costuma ser descrita como um hábito a ser eliminado. Pesquisas indicam que ela é, na verdade, útil em textos complexos, ajudando você a manter a sintaxe na memória de trabalho. Não tente suprimi-la em materiais difíceis. Deixe a aceleração gradual fazer seu trabalho.",
+		sourcesComprehension:
+			"Just & Carpenter (1987), The Psychology of Reading and Language Comprehension. · Rayner et al. (2016), Psychological Science in the Public Interest.",
+		bionicTitle: "O que é leitura biônica?",
+		bionicReading: "A leitura biônica",
+		bionicExplanation:
+			" coloca as primeiras letras de cada palavra em negrito. A teoria é que seu cérebro usa essas âncoras em negrito para prever e completar o restante da palavra mais rapidamente.",
+		note: "Observação:",
+		bionicNote:
+			"Pesquisas atuais revisadas por pares não encontraram benefícios mensuráveis da formatação biônica para a velocidade ou a compreensão da leitura em leitores em geral (Acta Psychologica, 2024). Alguns leitores consideram esse recurso útil em altas velocidades. Experimente e veja.",
+		bionicOption:
+			"No Speeedy, você pode usar o modo biônico junto com RSVP e ORP. O recurso está disponível como uma opção, não como uma promessa.",
+		tipsTitle: "Como melhorar sua velocidade de leitura",
+		tipStartSlowTitle: "Comece devagar e acelere",
+		tipStartSlowBody:
+			"Ajuste o leitor para uma velocidade levemente desconfortável, mas não penosa. Seu cérebro se adapta em algumas sessões. Começar rápido demais causa frustração e baixa compreensão. A aceleração gradual do Speeedy começa devagar e aumenta automaticamente.",
+		tipPunctuationTitle: "Use pausas na pontuação",
+		tipPunctuationBody:
+			"Ative as pausas em frases e vírgulas. Isso dá à memória de trabalho a janela de consolidação de que ela precisa, especialmente em textos complexos ou técnicos.",
+		tipTestTitle: "Faça primeiro um teste de velocidade de leitura",
+		tipTestBody:
+			"Antes de estimar seu WPM, faça um teste de leitura adequado. Leia uma passagem no seu ritmo natural e responda a 10 perguntas de compreensão. Sua medida inicial real costuma ser diferente do que você espera.",
+		tipDailyTitle: "Leia todos os dias",
+		tipDailyBody:
+			"Sessões diárias curtas funcionam melhor do que sessões longas ocasionais. De 15 a 20 minutos por dia com RSVP desenvolvem o reconhecimento de padrões que seu cérebro usa para processar palavras mais rápido.",
+		tipContextTitle: "Use o contexto periférico em textos difíceis",
+		tipContextBody:
+			"Mostre de 1 a 3 palavras de contexto antes e depois da palavra atual, de forma atenuada. Em materiais complexos ou técnicos, isso mantém o fluxo da frase e reduz o esforço de recuperar sua posição.",
+		tipComfortTitle: "Use o RSVP para ter conforto, não apenas velocidade",
+		tipComfortBody:
+			"Se a leitura parecer cansativa ou difícil de acompanhar, experimente o RSVP em um ritmo moderado, abaixo de 300 WPM. Alguns leitores acham mais fácil manter o ponto focal fixo do que percorrer as linhas, independentemente da velocidade.",
+		ready: "Pronto para começar?",
+		findSpeed: "Descubra sua velocidade de leitura",
+		ctaDescription:
+			"Leia no seu próprio ritmo, responda a 10 perguntas de compreensão e salve seu WPM e sua pontuação no perfil. Leva cerca de 3 minutos.",
+		takeTest: "Fazer o teste de leitura",
+		openApp: "Abrir app",
+	},
 	landing: {
 		speeedy: "speeedy",
 		github: "GitHub",
