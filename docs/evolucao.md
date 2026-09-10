@@ -7,7 +7,8 @@
 
 Fork público de [sami-29/speeedy](https://github.com/sami-29/speeedy) (MIT),
 local-first RSVP speed reader. Deploy: Cloudflare Pages → https://speeedy-2vc.pages.dev
-(projeto `speeedy`; `speeedy.pages.dev` pertence ao upstream).
+(projeto `speeedy`; a Cloudflare atribuiu o subdomínio `speeedy-2vc.pages.dev`
+porque `speeedy.pages.dev` já está tomado por outra conta — verificado via API).
 
 Fundação entregue:
 - Fork + fix de build limpo (tsbuildinfo commitado mascarava erro de tipo real; corrigido, 160/160 testes).
@@ -21,9 +22,14 @@ Fundação entregue:
 
 ---
 
-## F1 — Cloud Sync (PENDENTE: stack)
+## F1 — Cloud Sync (SUBSTITUÍDA — ver `docs/cloud-sync.md`)
 
-### Decisão em aberto
+> Decisão revista em 2026-09-10: a opção Supabase abaixo **não** foi adotada.
+> A F1 vigente é o cofre zero-knowledge sem conta (Pages Function + KV +
+> criptografia no cliente), especificado em `docs/cloud-sync.md`. Este bloco
+> fica registrado como histórico da decisão.
+
+### Decisão em aberto (histórico)
 
 | Opção | Prós | Contras |
 |---|---|---|
