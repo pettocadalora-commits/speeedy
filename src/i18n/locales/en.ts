@@ -136,6 +136,19 @@ The average adult reads at around two hundred and thirty-eight words per minute.
 		remove: "Remove",
 		removeDocument: "Remove {title}",
 	},
+	preview: {
+		chooseWhereToStart: "Choose where to start",
+		instructions:
+			"Scroll past copyright and front matter, then click the paragraph where the book starts.",
+		closePreview: "Close preview",
+		documentParagraphs: "Document paragraphs",
+		noText: "No text to preview.",
+		word: "word {index}",
+		startAtBeginning: "Start at beginning · {count} words",
+		fromWord: "From word {index} · {remaining} left",
+		fromBeginning: "From beginning",
+		startFromHere: "Start from here",
+	},
 	reader: {
 		pastedText: "Pasted Text",
 		clipboardTextLoaded: "Text loaded from clipboard ✓",

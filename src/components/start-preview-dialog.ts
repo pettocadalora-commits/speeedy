@@ -1,6 +1,7 @@
 import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { X } from "lucide";
+import { LocaleController } from "../i18n/controller.js";
 import { tokenize } from "../services/rsvp-engine.js";
 import { icon } from "../utils/icons.js";
 import "./ui/dialog.ts";
@@ -43,6 +44,8 @@ export function buildPreviewParagraphs(text: string): PreviewParagraph[] {
  */
 @customElement("start-preview-dialog")
 export class StartPreviewDialog extends LitElement {
+	private i18n = new LocaleController(this);
+
 	protected override createRenderRoot() {
 		return this;
 	}
@@ -113,16 +116,16 @@ export class StartPreviewDialog extends LitElement {
           <header class="flex items-start justify-between gap-3 px-5 py-4 border-b border-base-200 shrink-0">
             <div class="min-w-0">
               <h2 class="text-base font-semibold text-base-content truncate">
-                ${this.title.trim() || "Choose where to start"}
+                ${this.title.trim() || this.i18n.t("preview.chooseWhereToStart")}
               </h2>
               <p class="text-xs text-ui-muted font-light mt-0.5">
-                Scroll past copyright and front matter, then click the paragraph where the book starts.
+                ${this.i18n.t("preview.instructions")}
               </p>
             </div>
             <button
               type="button"
               class="btn btn-ghost btn-sm btn-circle shrink-0"
-              aria-label="Close preview"
+              aria-label=${this.i18n.t("preview.closePreview")}
               @click=${this.close}
             >
               ${icon(X, "w-4 h-4")}
@@ -132,11 +135,11 @@ export class StartPreviewDialog extends LitElement {
           <div
             class="flex-1 min-h-0 overflow-y-auto px-5 py-4 space-y-2 scrollbar-thin"
             role="listbox"
-            aria-label="Document paragraphs"
+            aria-label=${this.i18n.t("preview.documentParagraphs")}
           >
             ${
 							this.paragraphs.length === 0
-								? html`<p class="text-sm text-ui-muted text-center py-8">No text to preview.</p>`
+								? html`<p class="text-sm text-ui-muted text-center py-8">${this.i18n.t("preview.noText")}</p>`
 								: this.paragraphs.map(
 										(para, i) => html`
                   <button
@@ -156,7 +159,9 @@ export class StartPreviewDialog extends LitElement {
                         ¶ ${i + 1}
                       </span>
                       <span class="text-[10px] font-mono text-ui-muted-subtle">
-                        word ${para.startWordIndex.toLocaleString()}
+                        ${this.i18n.t("preview.word", {
+													index: para.startWordIndex.toLocaleString(),
+												})}
                       </span>
                     </div>
                     <p class="text-sm text-base-content/80 font-light leading-relaxed whitespace-pre-wrap">
@@ -172,8 +177,13 @@ export class StartPreviewDialog extends LitElement {
             <p class="text-xs text-ui-muted font-mono">
               ${
 								this.selectedStartIndex === 0
-									? `Start at beginning · ${this.totalWords.toLocaleString()} words`
-									: `From word ${this.selectedStartIndex.toLocaleString()} · ${remaining.toLocaleString()} left`
+									? this.i18n.t("preview.startAtBeginning", {
+											count: this.totalWords.toLocaleString(),
+										})
+									: this.i18n.t("preview.fromWord", {
+											index: this.selectedStartIndex.toLocaleString(),
+											remaining: remaining.toLocaleString(),
+										})
 							}
               ${
 								selectedPara && this.selectedStartIndex > 0
@@ -186,14 +196,14 @@ export class StartPreviewDialog extends LitElement {
                 type="button"
                 class="btn btn-ghost btn-sm"
                 @click=${() => this.startFrom(0)}
-              >From beginning</button>
+              >${this.i18n.t("preview.fromBeginning")}</button>
               <button
                 type="button"
                 class="btn btn-primary btn-sm"
                 data-umami-event="preview-start"
                 ?disabled=${this.paragraphs.length === 0}
                 @click=${() => this.startFrom(this.selectedStartIndex)}
-              >Start from here</button>
+              >${this.i18n.t("preview.startFromHere")}</button>
             </div>
           </footer>
         </div>

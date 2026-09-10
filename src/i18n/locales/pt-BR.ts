@@ -119,6 +119,19 @@ Um adulto lê, em média, cerca de duzentas e trinta e oito palavras por minuto.
 		remove: "Remover",
 		removeDocument: "Remover {title}",
 	},
+	preview: {
+		chooseWhereToStart: "Escolha onde começar",
+		instructions:
+			"Role para além dos direitos autorais e elementos pré-textuais, depois clique no parágrafo onde o livro começa.",
+		closePreview: "Fechar prévia",
+		documentParagraphs: "Parágrafos do documento",
+		noText: "Não há texto para visualizar.",
+		word: "palavra {index}",
+		startAtBeginning: "Começar do início · {count} palavras",
+		fromWord: "A partir da palavra {index} · {remaining} restantes",
+		fromBeginning: "Do início",
+		startFromHere: "Começar daqui",
+	},
 	reader: {
 		pastedText: "Texto colado",
 		clipboardTextLoaded: "Texto carregado da área de transferência ✓",
